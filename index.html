@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="lib/jquery.serializejson.min.js"></script>
+    <script src="jqueryUtil/ajaxUtils.js"></script>
+    <script>
+        var url = "127.0.0.1";
+
+        function ajaxPostTest() {
+            var data = {
+                id: '1',
+                name: '2',
+                age: 123
+            }
+            postJson(url, data, function (html, textStatus, jqXHR) {
+                alert('ok');
+            }, 'html');
+        }
+
+        function ajaxSubmit() {
+            submitFormToJson(url, '#testForm', 'json', function () {
+                alert('ok');
+            });
+
+        }
+        function ajaxSubmit_jquerySerializeJSON() {
+            var str = formToJson_jquerySerializeJSON('#testForm');
+            alert(str.id);
+            alert(str.name);
+        }
+
+        function ajaxtoString() {
+            var formArray = $("#testForm").serialize();
+            console.log(formArray);
+        }
+
+        function tojsonTest() {
+            var obj = {};
+            obj["a"] = "1";
+            obj["b"] = "2";
+            obj["c"] = "3";
+            alert(objToJson(obj));
+        }
+
+        function toObjTest() {
+            var json = '{"abc":123,"def":"456","xyz":"168"}';
+            var obj = jsonToObj(json);
+            alert(obj.abc);
+            alert(obj.def);
+            alert(obj.xyz);
+        }
+    </script>
+</head>
+
+<body>
+    <table border="1px" style="border-collapse:collapse;">
+        <tr>
+            <td>
+                <button onclick="ajaxPostTest()">提交普通json</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form id="testForm">
+                    id：
+                    <input type="text" name="id"> name:
+                    <input type="text" name="name">
+                </form>
+            </td>
+            <td>
+                <button type="button" onclick="ajaxSubmit()">表单元素转为json提交</button>
+            </td>
+            <td>
+                <button type="button" onclick="ajaxSubmit_jquerySerializeJSON()">表单元素转为json(插件jqueryserializeJSON方式)</button>
+            </td>
+            <td>
+                <button type="button" onclick="ajaxtoString()">表单元素转为普通k-v形式字符串参数</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                var obj ={}; obj["a"] = "1"; obj["b"] ="2"; obj["c"] ="3";
+            </td>
+            <td>
+                <button type="button" onclick="tojsonTest()">json对象转为json字符串</button>
+            </td>
+        </tr>
+        <tr>
+            <td>{"abc":123,"def":"456","xyz":"168"}</td>
+            <td>
+                <button type="button" onclick="toObjTest()">json字符串转为json</button>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
