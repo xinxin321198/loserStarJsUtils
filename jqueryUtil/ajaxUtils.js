@@ -20,7 +20,7 @@ function postJson(url,data,dataType,callBack){
  * @param {*} callBack 
  */
 function submitFormToJson(url,formSelector,dataType,callBack){
-        postJson(url, formToJson(formSelector), callBack, 'json');
+        postJson(url, formToJson_jquerySerializeJSON(formSelector),dataType, callBack);
 }
 
 /**
