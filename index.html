@@ -55,6 +55,14 @@
             alert(obj.def);
             alert(obj.xyz);
         }
+
+
+        function jqueryParseHtml(){
+            var htmlStr = $('#theHtml').val();
+            var doc = $(htmlStr);
+            alert(doc.find("#theHtml").val());
+            console.log(doc.find("#theHtml").val());
+        }
     </script>
 </head>
 
@@ -96,6 +104,17 @@
             <td>{"abc":123,"def":"456","xyz":"168"}</td>
             <td>
                 <button type="button" onclick="toObjTest()">json字符串转为json</button>
+            </td>
+        </tr>
+        <tr>
+            <td>jquery解析html字符串</td>
+            <td>
+                <textarea name="theHtml" id="theHtml" cols="30" rows="10">
+                    111111111111111111111111111
+                </textarea>
+            </td>
+            <td>
+                <button type="button" onclick="jqueryParseHtml()">jquery解析html字符串并获取theHtml这个id元素里里的值</button>
             </td>
         </tr>
     </table>
