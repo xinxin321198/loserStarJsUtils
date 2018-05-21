@@ -79,3 +79,66 @@ var selectedOption = function(selector, value) {
         }
     }
 };
+
+
+function dateFormat(dateString, format) {
+  if (dateString==undefined||dateString==null) return "";
+  var time =
+    dateString instanceof Date ?
+    dateString :
+    new Date(
+      dateString
+      .replace("年", "-")
+      .replace("月", "-")
+      .replace("日", "")
+      .replace(/-/g, "/")
+      .replace(/T|Z/g, " ")
+      .trim()
+    );
+  var o = {
+    "M+": time.getMonth() + 1, // 月份
+    "d+": time.getDate(), // 日
+    "h+": time.getHours(), // 小时
+    "m+": time.getMinutes(), // 分
+    "s+": time.getSeconds(), // 秒
+    "q+": Math.floor((time.getMonth() + 3) / 3), // 季度
+    S: time.getMilliseconds()
+    // 毫秒
+  };
+  if (/(y+)/.test(format))
+    format = format.replace(
+      RegExp.$1,
+      (time.getFullYear() + "").substr(4 - RegExp.$1.length)
+    );
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(format))
+      format = format.replace(
+        RegExp.$1,
+        RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)
+      );
+  return format;
+}
+
+/**
+ * 将数值四舍五入(保留2位小数)后格式化成金额形式
+ *
+ * @param num
+ *            数值(Number或者String)
+ * @return 金额格式的字符串,如'1,234,567.45'
+ * @type String
+ */
+function formatCurrency(num) {
+    num = num.toString().replace(/\$|\,/g, "");
+    if (isNaN(num)) num = "0";
+    sign = num == (num = Math.abs(num));
+    num = Math.floor(num * 100 + 0.50000000001);
+    cents = num % 100;
+    num = Math.floor(num / 100).toString();
+    if (cents < 10) cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+      num =
+      num.substring(0, num.length - (4 * i + 3)) +
+      "," +
+      num.substring(num.length - (4 * i + 3));
+    return (sign ? "" : "-") + num + "." + cents;
+  }
