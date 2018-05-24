@@ -9,9 +9,12 @@
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
     <script src="lib/jquery.serializejson.min.js"></script>
     <script src="jqueryUtil/ajaxUtils.js"></script>
+    <script src="jqueryUtil/common.js"></script>
     <script>
+        //检查当前浏览器版本
+        var bv = BorwserVersion();
+        alert("当前浏览器版为:"+bv);
         var url = "127.0.0.1";
-
         function ajaxPostTest() {
             var data = {
                 id: '1',
