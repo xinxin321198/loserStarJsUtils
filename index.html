@@ -11,9 +11,7 @@
     <script src="jqueryUtil/ajaxUtils.js"></script>
     <script src="jqueryUtil/common.js"></script>
     <script>
-        //检查当前浏览器版本
-        var bv = BorwserVersion();
-        alert("当前浏览器版为:"+bv);
+
         var url = "127.0.0.1";
         function ajaxPostTest() {
             var data = {
@@ -66,6 +64,14 @@
             alert(doc.find("#theHtml").val());
             console.log(doc.find("#theHtml").val());
         }
+
+
+        $(function(){
+            //检查当前浏览器版本
+            var bv = BorwserVersion();
+            alert("当前浏览器版为:"+bv);
+            alert(i);
+        });
     </script>
 </head>
 
