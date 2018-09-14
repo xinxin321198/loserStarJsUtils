@@ -1,5 +1,6 @@
 /**
- * post提交json数据
+ * post提交json字符串数据
+ * Content-Type: application/json
  */
 function postJson(url,data,dataType,callBack){
 	$.ajax({ 
@@ -8,6 +9,20 @@ function postJson(url,data,dataType,callBack){
         dataType:dataType,      
         contentType:"application/json; charset=utf-8",               
         data:JSON.stringify(data), 
+        success:callBack
+     }); 
+}
+/**
+ * post提交json对象
+ * Content-Type: application/x-www-form-urlencoded
+ */
+function postObj(url,data,dataType,callBack){
+	$.ajax({ 
+        type:"POST", 
+        url:url, 
+        dataType:dataType,      
+        contentType:"application/x-www-form-urlencoded; charset=utf-8",               
+        data:data, 
         success:callBack
      }); 
 }
@@ -30,8 +45,8 @@ function submitFormToJson(url,formSelector,dataType,callBack){
 function formToJson(formSelector){
         var data = {};
         var formArray = $(formSelector).serializeArray();
-        for (let index = 0; index < formArray.length; index++) {
-            const element = formArray[index];
+        for (var index = 0; index < formArray.length; index++) {
+            var element = formArray[index];
             data[element.name] = element.value;
         }
         return data;

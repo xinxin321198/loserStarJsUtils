@@ -202,3 +202,12 @@ loserStarJsUtils.formatCurrency = function(num) {
       num.substring(num.length - (4 * i + 3));
     return (sign ? "" : "-") + num + "." + cents;
   }
+
+/**
+ * 让某个select元素的值选中，基于jquery
+ * @param {*} selector 
+ * @param {*} value 
+ */
+loserStarJsUtils.getSelectedForSelect = function (selector,value) {
+    $(selector).find("[value="+value+"]").attr("selected",true);
+}
