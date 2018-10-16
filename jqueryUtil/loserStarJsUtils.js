@@ -1,3 +1,6 @@
+/**
+ * version:20181016
+ */
 var loserStarJsUtils = {};
 
 /**
@@ -205,9 +208,45 @@ loserStarJsUtils.formatCurrency = function(num) {
 
 /**
  * 让某个select元素的值选中，基于jquery
- * @param {*} selector 
+ * @param {*} selector id选择器
  * @param {*} value 
  */
-loserStarJsUtils.getSelectedForSelect = function (selector,value) {
+loserStarJsUtils.setSelectedForSelect = function (selector,value) {
     $(selector).find("[value="+value+"]").attr("selected",true);
 }
+
+/**
+ * 让某个radio元素的值选中，基于jquery
+ * @param {*} name radio的name
+ * @param {*} value 
+ */
+loserStarJsUtils.setSelectedForRadio = function(name,value){
+	$("input[name='"+name+"'][value="+value+"]").attr("checked",true); 
+}
+/**
+ * 得到select元素选中项的text
+ * @param {*} selector 
+ */
+loserStarJsUtils.setSelectedTextForSelect = function (selector) {
+    return $(selector).find("option:selected").text();
+}
+
+/**
+ * 得到seelct元素选中项的value(第一种方式，基于jquery选择器的)
+ * @param {*} selector 
+ */
+loserStarJsUtils.getSelectedValueForSelect1 = function (selector){
+	return $(selector).find("option:selected").val();
+}
+/**
+ * 得到seelct元素选中项的value(第二种方式，基于jquery自动取值的)
+ * @param {*} selector 
+ */
+loserStarJsUtils.getSelectedValueForSelect1 = function (selector){
+   return $(selector).val();
+}
+
+loserStarJsUtils.autoTextAreaHeight = function (o) {
+    o.style.height = (o.scrollTop + o.scrollHeight +2)+ "px";
+}
+
