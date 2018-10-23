@@ -1,5 +1,5 @@
 /**
- * version:20181016
+ * version:20181023
  */
 var loserStarJsUtils = {};
 
@@ -227,7 +227,7 @@ loserStarJsUtils.setSelectedForRadio = function(name,value){
  * 得到select元素选中项的text
  * @param {*} selector 
  */
-loserStarJsUtils.setSelectedTextForSelect = function (selector) {
+loserStarJsUtils.getSelectedTextForSelect = function (selector) {
     return $(selector).find("option:selected").text();
 }
 
