@@ -59,6 +59,19 @@ loserStarJsUtils.BorwserVersion = function(){
 }
 
 /**
+ * 得到鼠标坐标
+ */
+function getMousePos(event) {
+    var e = event || window.event;
+    var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+    var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    var x = e.pageX || e.clientX + scrollX;
+    var y = e.pageY || e.clientY + scrollY;
+    //alert('x: ' + x + '\ny: ' + y);
+    return { 'x': x, 'y': y };
+}
+
+/**
  * 把某个checkbox里选中的值以逗号分隔放入第二个参数的元素的value上
  * @param checkBoxName
  * @param strSelector
@@ -246,6 +259,9 @@ loserStarJsUtils.getSelectedValueForSelect1 = function (selector){
    return $(selector).val();
 }
 
+/**
+ * textarea自动高度
+ */
 loserStarJsUtils.autoTextAreaHeight = function (o) {
     o.style.height = (o.scrollTop + o.scrollHeight +2)+ "px";
 }
