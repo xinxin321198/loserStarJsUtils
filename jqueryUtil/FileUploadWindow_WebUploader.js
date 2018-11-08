@@ -6,10 +6,19 @@
  * @param uploadBtnSelector 开始上传按钮的容器的css选择器
  * @param url 上传的处理地址
  * @param callBack 上传的完成的回调函数
- * @returns
+ * @returns 返回一个储存基本信息的对象，里面有个open方法可以打开这个窗口
  */
 var FileUploadWindow_WebUploader={};
 FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSelector,pickBtnSelector,uploadBtnSelector,url,okCallBack,errorCallBack) {
+	var tempWindow = {};
+	tempWindow.windowId = windowId;
+	tempWindow.fileListSelector = fileListSelector;
+	tempWindow.pickBtnSelector = pickBtnSelector;
+	tempWindow.uploadBtnSelector = uploadBtnSelector;
+	tempWindow.url = url;
+	//添加打开方法
+	tempWindow.open = FileUploadWindow_WebUploader.openWindow;
+	
 	var uploadWindow = $("#"+windowId);
 	var offset = uploadWindow.offset();
 	uploadWindow.jqxWindow({
@@ -83,14 +92,19 @@ FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSe
 				//关闭窗口
 				$("#"+windowId).jqxWindow('close');
 			});
+			
+			//把上传组件所在windowId保存好
+			//添加一个打开本窗口的方法
 			return fileUploadWindow_uploader_obj
 		}
 	});
+	return tempWindow;
 }
 /**
  * 打开文件上传的window
  * @param window的div的选择器
  */
-FileUploadWindow_WebUploader.openWindow = function (windowSelector){
-  $(windowSelector).jqxWindow('open');
+FileUploadWindow_WebUploader.openWindow = function (){
+	var tempFileWindow = this;
+  $("#"+tempFileWindow.windowId).jqxWindow('open');
 }
