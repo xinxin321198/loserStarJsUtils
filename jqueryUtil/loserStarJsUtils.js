@@ -1,5 +1,5 @@
 /**
- * version:20181023
+ * version:20181110
  */
 var loserStarJsUtils = {};
 
@@ -61,7 +61,7 @@ loserStarJsUtils.BorwserVersion = function(){
 /**
  * 得到鼠标坐标
  */
-function getMousePos(event) {
+loserStarJsUtils.getMousePos = function(event) {
     var e = event || window.event;
     var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
     var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
@@ -70,6 +70,12 @@ function getMousePos(event) {
     //alert('x: ' + x + '\ny: ' + y);
     return { 'x': x, 'y': y };
 }
+/**
+ * 替换所有匹配的字符串
+ */
+loserStarJsUtils.replaceAll = function(sourceStr,search, replacement) {
+    return sourceStr.replace(new RegExp(search, 'g'), replacement);
+};
 
 /**
  * 把某个checkbox里选中的值以逗号分隔放入第二个参数的元素的value上
