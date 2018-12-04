@@ -10,6 +10,10 @@
     <script src="lib/jquery.serializejson.min.js"></script>
     <script src="jqueryUtil/ajaxUtils.js"></script>
     <script src="jqueryUtil/common.js"></script>
+
+    <link rel="stylesheet" href="webuploader-0.1.5/webuploader.css">
+    <script src="webuploader-0.1.5/webuploader.html5only.js"></script>
+    
     <script>
 
         var url = "127.0.0.1";
@@ -65,17 +69,90 @@
             console.log(doc.find("#theHtml").val());
         }
 
+        //初始化上传组件
+        function initWebUploader(){
+            var windowId = "_loserStar";//用于标识唯一的上传组件
+            var upUrl =  'fileUpload.do';
+            var fileUploadWindow_uploader_obj = WebUploader.create({
+                // swf文件路径
+                //        swf: BASE_URL + '/js/Uploader.swf',
+                
+                // 文件接收服务端。
+                server: upUrl,
+                
+                // 选择文件的按钮。可选。
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                pick: {id:"#picker",innerHTML: '选择文件'},
+                
+                // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+                resize: false
+            });
+            
+            // 当有文件被添加进队列的时候
+            fileUploadWindow_uploader_obj.on( 'fileQueued', function( file ) {
+                //生成相关的一些html
+                $("#thelist").append( '<div id="' +windowId+'_'+ file.id + '" class="bg-info">' +
+                        '<span id="'+ windowId+'_'+file.id+'_span" class="text-warning" style="color: darksalmon;">等待上传...</span>' +
+                        '<label id="'+ windowId+'_'+file.id+'_label" class="info"  style="margin-left: 10px;color: seagreen;">' + file.name + '</label>' +
+                        '<button id="'+windowId+'_'+file.id+'_delBtn" class="easyui-linkbutton l-btn l-btn-small" style="margin-left:10px;width: 48px;color: red;" file_id="'+file.id+'">x</button>'+
+                '</div>' );
+                //在移除文件的按钮的对象上绑定一个该按钮所属的上传组件对象的属性
+                document.getElementById(windowId+"_"+file.id+"_delBtn").uploadObj = this;
+                
+                //绑定移除文件的事件
+                $("#"+windowId+"_"+file.id+"_delBtn").click(function(){
+                    var self = this;//获取按钮对象自己
+                    var file_id = $(self).attr("file_id");//取出文件id
+                    self.uploadObj.removeFile(file_id,true);//根据按钮上绑定的上传组件，再根据文件的id，从组件列表中移除文件
+                    $( '#'+windowId+'_'+file_id).remove();//移除文件的html
+                })
+            });
+            //绑定开始上传的按钮事件
+            $("#ctlBtn").on( 'click', function() {
+                fileUploadWindow_uploader_obj.upload();//开始上传
+            });
+            
+            //当文件上传成功时触发。
+            fileUploadWindow_uploader_obj.on( 'uploadSuccess', function( file ) {
+                $( '#'+windowId+'_'+file.id ).find('#'+windowId+'_'+file.id+'_span').text('已上传').removeClass("text-warning").addClass("text-success");
+                fileUploadWindow_uploader_obj.removeFile( file,true );//从上传组件的队列中移除文件，默认只会标记文件状态为已取消，如果第二个参数为 true 则会从 queue 中移除
+                $( '#'+windowId+'_'+file.id).remove();
+                alert("上传成功："+file.name);
+            });
+
+            //当文件上传出错时触发。
+            fileUploadWindow_uploader_obj.on( 'uploadError', function( file ) {
+                $( '#'+windowId+'_'+file.id ).find('#'+windowId+'_'+file.id+'_span').text('上传出错');
+                fileUploadWindow_uploader_obj.removeFile( file ,true);//从上传组件的队列中移除文件，默认只会标记文件状态为已取消，如果第二个参数为 true 则会从 queue 中移除
+                $( '#'+windowId+'_'+file.id).remove();
+                alert("上传出错："+file.name);
+            });
+            
+            //当所有文件上传结束时触发。
+            fileUploadWindow_uploader_obj.on('uploadFinished', function () {
+                //重置uploader。目前只重置了队列。
+                fileUploadWindow_uploader_obj.reset();
+                alert("所有文件上传结束");
+            });
+        }
 
         $(function(){
             //检查当前浏览器版本
             var bv = BorwserVersion();
-            alert("当前浏览器版为:"+bv);
+            document.getElementById("browserVersion").innerText=bv;
+
+            //初始化上传组件
+            initWebUploader();
         });
     </script>
 </head>
 
 <body>
     <table border="1px" style="border-collapse:collapse;">
+        <tr>
+            <td>当前浏览器版本：</td>
+            <td id="browserVersion" style="color:red;"></td>
+        </tr>
         <tr>
             <td>
                 <button onclick="ajaxPostTest()">提交普通json</button>
@@ -123,6 +200,19 @@
             </td>
             <td>
                 <button type="button" onclick="jqueryParseHtml()">jquery解析html字符串并获取theHtml这个id元素里里的值</button>
+            </td>
+        </tr>
+        <tr>
+            <td>上传组件</td>
+            <td>
+                <div id="uploader" class="wu-example">
+                    <div>
+                        <div id="picker">选择文件</div>
+                         <button id="ctlBtn">上传</button>
+                    </div>
+                    <div style="font-size: 15px;font-weight: bold;">待上传文件列表</div>
+                    <div id="thelist" class="uploader-list"></div>
+                </div>
             </td>
         </tr>
     </table>
