@@ -1,5 +1,5 @@
 /**
- * version:20181110
+ * version:20181210
  */
 var loserStarJsUtils = {};
 
@@ -272,3 +272,18 @@ loserStarJsUtils.autoTextAreaHeight = function (o) {
     o.style.height = (o.scrollTop + o.scrollHeight +2)+ "px";
 }
 
+/**
+ * 给input date一个默认值
+ */
+loserStarJsUtils.setInputDateDefault = function(selector){
+    // 给input  date设置默认值
+    var now = new Date();
+    //格式化日，如果小于9，前面补0
+    var day = ("0" + now.getDate()).slice(-2);
+    //格式化月，如果小于9，前面补0
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    //拼装完整日期格式
+    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+    //完成赋值
+    $(selector).val(today);
+}
