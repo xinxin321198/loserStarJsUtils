@@ -90,6 +90,7 @@ AuditWindow2.initWindow = function (windowId, okBtnSelector, cancelBtnSelector) 
 AuditWindow2.open = function (okCallBack, cancelCallBack, element) {
     var tempWindow = this;
     //为确定按钮绑定传入的点击事件
+    $(tempWindow.okBtnSelector).unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
     $(tempWindow.okBtnSelector).on('click', function (e) {
         if (okCallBack != undefined) {
             okCallBack();
@@ -98,6 +99,7 @@ AuditWindow2.open = function (okCallBack, cancelCallBack, element) {
     });
 
     //为取消按钮绑定传入的取消事件
+    $(tempWindow.cancelBtnSelector).unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
     $(tempWindow.cancelBtnSelector).on('click', function (e) {
         if (cancelCallBack != undefined) {
             cancelCallBack();
