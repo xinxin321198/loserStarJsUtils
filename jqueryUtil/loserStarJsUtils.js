@@ -287,3 +287,17 @@ loserStarJsUtils.setInputDateDefault = function(selector){
     //完成赋值
     $(selector).val(today);
 }
+
+/**
+  * 监听打开的弹窗，关闭后刷新页面
+  */
+ loserStarJsUtils.openWin = function (url,text,winInfo){
+    var winObj = window.open(url,text,winInfo);
+    var loop = setInterval(function() {     
+        if(winObj.closed) {    
+            clearInterval(loop);    
+            //alert('closed');    
+            parent.location.reload(); 
+        }    
+    }, 1);   
+}
