@@ -4,20 +4,31 @@
  * @param fileListSelector 窗口内上传的文件列表的list容器的css选择器
  * @param pickBtnSelector 文件选择按钮的容器的css选择器
  * @param uploadBtnSelector 开始上传按钮的容器的css选择器
- * @param url 上传的处理地址
+ * @param url 默认的上传的处理地址（如果需上传时候才传入，可通过checkDataCallBack中调用fileUploadWindow_uploader_obj.options.server改变url）
  * @param callBack 上传的完成的回调函数
+ * @param checkDataCallBack 上传前检测数据合法性的回调函数
  * @returns 返回一个储存基本信息的对象，里面有个open方法可以打开这个窗口
  */
-var FileUploadWindow_WebUploader={};
-FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSelector,pickBtnSelector,uploadBtnSelector,url,okCallBack,errorCallBack) {
+var FileUploadWindow_WebUploader={};//当做包名进行数据隔离，防止变量名污染
+FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSelector,pickBtnSelector,uploadBtnSelector,url,okCallBack,errorCallBack,checkDataCallBack) {
 	var tempWindow = {};
-	tempWindow.windowId = windowId;
-	tempWindow.fileListSelector = fileListSelector;
-	tempWindow.pickBtnSelector = pickBtnSelector;
-	tempWindow.uploadBtnSelector = uploadBtnSelector;
-	tempWindow.url = url;
+	tempWindow.windowId = windowId;//上传组件所在的窗口组件的windowId
+	tempWindow.fileListSelector = fileListSelector;//文件列表选择器
+	tempWindow.pickBtnSelector = pickBtnSelector;//文件选择按钮css选择器
+	tempWindow.uploadBtnSelector = uploadBtnSelector;//开始上传按钮的css选择器
+	tempWindow.url = url;//默认的url
 	//添加打开方法
-	tempWindow.open = FileUploadWindow_WebUploader.openWindow;
+	tempWindow.open = function (){
+		var tempFileWindow = this;
+		  $("#"+tempFileWindow.windowId).jqxWindow('open');
+	}
+	//添加设置url的方法
+	tempWindow.setUploadUrl = function(newUrl){
+		var tempFileWindow = this;
+		if(tempFileWindow.fileUploadWindow_uploader_obj){
+			tempFileWindow.fileUploadWindow_uploader_obj.options.server = newUrl;
+		}
+	}
 	
 	var uploadWindow = $("#"+windowId);
 	var offset = uploadWindow.offset();
@@ -67,13 +78,19 @@ FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSe
 			});
 			//绑定开始上传的按钮事件
 			$(uploadBtnSelector).on( 'click', function() {
+				if(checkDataCallBack!=undefined){
+					var flag = checkDataCallBack();
+					if(!flag){
+						return;
+					}
+				}
 				fileUploadWindow_uploader_obj.upload();
 			});
 			
 			//当文件上传成功时触发。
-			fileUploadWindow_uploader_obj.on( 'uploadSuccess', function( file ) {
+			fileUploadWindow_uploader_obj.on( 'uploadSuccess', function( file ,data) {
 			    $( '#'+windowId+'_'+file.id ).find('#'+windowId+'_'+file.id+'_span').text('已上传').removeClass("text-warning").addClass("text-success");
-			    okCallBack();
+			    if(okCallBack!=undefined){okCallBack(data);}
 			    fileUploadWindow_uploader_obj.removeFile( file,true );
 			    $( '#'+windowId+'_'+file.id).remove();
 			});
@@ -81,7 +98,7 @@ FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSe
 			//当文件上传出错时触发。
 			fileUploadWindow_uploader_obj.on( 'uploadError', function( file ) {
 			    $( '#'+windowId+'_'+file.id ).find('#'+windowId+'_'+file.id+'_span').text('上传出错');
-			    errorCallBack();
+			    if(errorCallBack!=undefined){errorCallBack();}
 			    fileUploadWindow_uploader_obj.removeFile( file ,true);
 			    $( '#'+windowId+'_'+file.id).remove();
 			});
@@ -92,19 +109,10 @@ FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSe
 				//关闭窗口
 				$("#"+windowId).jqxWindow('close');
 			});
-			
-			//把上传组件所在windowId保存好
-			//添加一个打开本窗口的方法
+			//把构建好的对象保存到总的对象里
+			tempWindow.fileUploadWindow_uploader_obj = fileUploadWindow_uploader_obj;
 			return fileUploadWindow_uploader_obj
 		}
 	});
 	return tempWindow;
-}
-/**
- * 打开文件上传的window
- * @param window的div的选择器
- */
-FileUploadWindow_WebUploader.openWindow = function (){
-	var tempFileWindow = this;
-  $("#"+tempFileWindow.windowId).jqxWindow('open');
 }
