@@ -289,15 +289,56 @@ loserStarJsUtils.setInputDateDefault = function(selector){
 }
 
 /**
-  * 监听打开的弹窗，关闭后刷新页面
-  */
- loserStarJsUtils.openWin = function (url,text,winInfo){
-    var winObj = window.open(url,text,winInfo);
-    var loop = setInterval(function() {     
-        if(winObj.closed) {    
-            clearInterval(loop);    
-            //alert('closed');    
-            parent.location.reload(); 
-        }    
-    }, 1);   
-}
+ * 弹出提示框
+ */
+loserStarJsUtils.showMsg = function(text, position) {
+    var div = $('<div></div>');
+    // div.addClass('show_msg');
+    // .show_msg {
+    // 	width:100%;
+    // 	text-align:center;
+    // 	position:fixed;
+    // 	left:0;
+    // 	z-index:999;
+    // }
+    div.css("width","100%");
+    div.css("text-align","center");
+    div.css("position","fixed");
+    div.css("left","0");
+    div.css("z-index","999");
+
+    if (position == 'top') {
+        div.css('top', '10%');
+    } else if (position == 'center') {
+        div.css('top', '');
+        div.css('top', '50%');
+    } else {
+        div.css('top', '95%');
+    }
+
+    var span = $('<span></span>');
+    // span.addClass('show_span');
+    // .show_span {
+    // 	display:inline-block;
+    // 	padding:10px 20px;
+    // 	line-height:0.35rem;
+    // 	background:rgba(0,0,0,0.8);
+    // 	border-radius:50px;
+    // 	color:#fff;
+    // 	font-size:20px;
+    // }
+    span.css("display","inline-block");
+    span.css("padding","10px 20px");
+    span.css("line-height","0.35rem");
+    span.css("background","rgba(0,0,0,0.8)");
+    span.css("border-radius","50px");
+    span.css("color","#fff");
+    span.css("font-size","20px");
+    span.text(text);
+
+    div.append(span);
+    $('body').append(div);
+    div.hide();
+    div.fadeIn(1000);
+    div.fadeOut(1000);
+};
