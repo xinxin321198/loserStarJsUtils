@@ -342,3 +342,15 @@ loserStarJsUtils.showMsg = function(text, position) {
     div.fadeIn(1000);
     div.fadeOut(1000);
 };
+
+/**
+ * 获取url参数
+ * @param name
+ * @returns
+ */
+loserStarJsUtils.GetQueryString = function(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则
+    if (r != null) return unescape(r[2]);
+    return null;
+}
