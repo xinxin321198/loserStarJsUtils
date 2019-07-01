@@ -59,6 +59,70 @@ loserStarJsUtils.BorwserVersion = function(){
 }
 
 /**
+ * crhome6以上的版本
+ */
+loserStarJsUtils.Chrome6NewVersion = function(){
+    var flag = true;
+    browserType = loserStarJsUtils.checkBrowserType();
+    if (browserType != 'Chrome6+') {
+        flag = false;
+    }
+    return flag;
+}
+
+
+loserStarJsUtils.checkBrowserType =function(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf('Opera') > -1;
+    if (isOpera) {
+      return 'Opera';
+    }
+  
+    if (userAgent.indexOf('Firefox') > -1) {
+      return 'FF';
+    }
+  
+    if (userAgent.indexOf('Chrome') > -1) {
+      if (loserStarJsUtils.getChromeVersion() < 60) {
+        return 'Chrome6-';
+      } else {
+        return 'Chrome6+';
+      }
+    }
+  
+    if (userAgent.indexOf('Safari') > -1) {
+      return 'Safari';
+    }
+  
+    if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+      return 'IE10+';
+    }
+  
+    if (
+      userAgent.indexOf('compatible') > -1 &&
+      userAgent.indexOf('MSIE') > -1 &&
+      !isOpera
+    ) {
+      return 'IE10-';
+    }
+  
+    return '';
+  }
+  
+  loserStarJsUtils.getChromeVersion = function(){
+    var arr = navigator.userAgent.split(' ');
+    var chromeVersion = '';
+    for (var i = 0; i < arr.length; i++) {
+      if (/chrome/i.test(arr[i])) chromeVersion = arr[i];
+    }
+    if (chromeVersion) {
+      return Number(chromeVersion.split('/')[1].split('.')[0]);
+    } else {
+      return false;
+    }
+  }
+
+/**
  * 得到鼠标坐标
  */
 loserStarJsUtils.getMousePos = function(event) {
