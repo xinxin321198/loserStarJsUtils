@@ -122,6 +122,32 @@ loserStarJsUtils.checkBrowserType =function(){
     }
   }
 
+  loserStarJsUtils.isFlashOpen = function(){
+    var rtn = true;
+    var isIE = !-[1,];
+    if (isIE) {
+        try {
+            var swf1 = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+        }
+        catch (e) {
+            rtn = false;
+        }
+    }
+    else {
+        try {
+            var swf2 = navigator.plugins['Shockwave Flash'];
+            if (swf2 == undefined) {
+                rtn = false;
+            }
+        } catch (e) {
+ 
+        }
+    };
+  if(rtn==false){
+       alert("您未开启Flash！");
+    }else{ }
+}
+
 /**
  * 得到鼠标坐标
  */
