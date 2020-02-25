@@ -70,7 +70,9 @@ loserStarJsUtils.Chrome6NewVersion = function(){
     return flag;
 }
 
-
+/**
+ * 检查浏览器类型
+ */
 loserStarJsUtils.checkBrowserType =function(){
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
     var isOpera = userAgent.indexOf('Opera') > -1;
@@ -109,6 +111,9 @@ loserStarJsUtils.checkBrowserType =function(){
     return '';
   }
   
+  /**
+   * 检查chrome浏览器的版本
+   */
   loserStarJsUtils.getChromeVersion = function(){
     var arr = navigator.userAgent.split(' ');
     var chromeVersion = '';
@@ -122,6 +127,9 @@ loserStarJsUtils.checkBrowserType =function(){
     }
   }
 
+  /**
+   * flash是否打开
+   */
   loserStarJsUtils.isFlashOpen = function(){
     var rtn = true;
     var isIE = !-[1,];
@@ -325,6 +333,13 @@ loserStarJsUtils.setSelectedForSelect = function (selector,value) {
 }
 
 /**
+ * 获取某个radio元素的选中的值
+ */
+loserStarJsUtils.getSelectedForRadio = function(selector){
+  return $("input[name='"+selector+"']:checked");
+}
+
+/**
  * 让某个radio元素的值选中，基于jquery
  * @param {*} name radio的name
  * @param {*} value 
@@ -332,6 +347,16 @@ loserStarJsUtils.setSelectedForSelect = function (selector,value) {
 loserStarJsUtils.setSelectedForRadio = function(name,value){
 	$("input[name='"+name+"'][value="+value+"]").attr("checked",true); 
 }
+
+/**
+ * 让某个radio元素的值选中，针对jquery mobile的组件的方法,因为jqueryMobile需要调用一个刷新方法
+ */
+loserStarJsUtils.setSelectedForRadio_forJqueryMobile = function(name,value){
+	$("input[name='"+name+"'][value='"+value+"'] ").attr("checked",true).checkboxradio("refresh");
+}
+
+
+
 /**
  * 得到select元素选中项的text
  * @param {*} selector 
@@ -351,7 +376,7 @@ loserStarJsUtils.getSelectedValueForSelect1 = function (selector){
  * 得到seelct元素选中项的value(第二种方式，基于jquery自动取值的)
  * @param {*} selector 
  */
-loserStarJsUtils.getSelectedValueForSelect1 = function (selector){
+loserStarJsUtils.getSelectedValueForSelect2 = function (selector){
    return $(selector).val();
 }
 
@@ -444,3 +469,5 @@ loserStarJsUtils.GetQueryString = function(name) {
     if (r != null) return unescape(r[2]);
     return null;
 }
+
+
