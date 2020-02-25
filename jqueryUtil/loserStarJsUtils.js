@@ -334,18 +334,19 @@ loserStarJsUtils.setSelectedForSelect = function (selector,value) {
 
 /**
  * 获取某个radio元素的选中的值
+ * @param {*} elementName name名称
  */
-loserStarJsUtils.getSelectedForRadio = function(selector){
-  return $("input[name='"+selector+"']:checked");
+loserStarJsUtils.getSelectedForRadio = function(elementName){
+  return $("input[name='"+elementName+"']:checked").val();
 }
 
 /**
  * 让某个radio元素的值选中，基于jquery
- * @param {*} name radio的name
+ * @param {*} elementName radio的name
  * @param {*} value 
  */
-loserStarJsUtils.setSelectedForRadio = function(name,value){
-	$("input[name='"+name+"'][value="+value+"]").attr("checked",true); 
+loserStarJsUtils.setSelectedForRadio = function(elementName,value){
+	$("input[name='"+elementName+"'][value="+value+"]").attr("checked",true); 
 }
 
 /**
@@ -470,4 +471,54 @@ loserStarJsUtils.GetQueryString = function(name) {
     return null;
 }
 
+/**
+ * 获取选中的checkbox的值,基于jquery选择器,传入元素的name
+ */
+loserStarJsUtils.getSelectedForCheckbox = function(elementName){
+  var selectedList = [];
+  for(var i=0;i<$("input[name='"+elementName+"']:checked").length;i++){
+    selectedList[i]= $("input[name='"+elementName+"']:checked")[i].value;
+  }
+  return selectedList;
+}
 
+/**
+ * 获取选中的checkbox的值,以某个字符分隔，传入元素的name
+ */
+loserStarJsUtils.getSelectedStrForCheckbox = function(elementName,splitChar){
+    var selectedList = loserStarJsUtils.getSelectedForCheckbox(elementName);
+    var str = "";
+    for(var i=0;i<selectedList.length;i++){
+      str+=selectedList[i];
+      if(i<(selectedList.length-1)){
+      str+=splitChar;
+      }
+    }
+    return str;
+}
+
+/**
+ * 传入想要选中的值的集合，让这些值相等的checkbox选中
+ * @param {*} elmentName 元素的name
+ * @param {*} list 要选中的值的列表
+ */
+loserStarJsUtils.setSelectedForCheckbox = function(elmentName,valueList){
+  var checkBoxList = $("input[name='"+elmentName+"']");
+    for (var i = 0; i < valueList.length; i++) {
+        checkBoxList.each(function() {
+            if (this.value == valueList[i]) {
+                this.setAttribute("checked", "checked");
+            }
+        });
+    }
+}
+
+/**
+ * 传入想要选中的值的集合，让这些值相等的checkbox选中(针对jquery mobile)
+ * @param {*} elmentName 元素的name
+ * @param {*} list 要选中的值的列表
+ */
+loserStarJsUtils.setSelectedForCheckbox_forJqueryMobile = function(elmentName,valueList){
+  loserStarJsUtils.setSelectedForCheckbox(elmentName,valueList);
+  $("input[name='"+elmentName+"']").checkboxradio("refresh");
+}
