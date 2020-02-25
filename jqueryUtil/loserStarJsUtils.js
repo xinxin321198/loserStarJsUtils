@@ -339,6 +339,13 @@ loserStarJsUtils.setSelectedForSelect = function (selector,value) {
 loserStarJsUtils.getSelectedForRadio = function(elementName){
   return $("input[name='"+elementName+"']:checked").val();
 }
+/**
+ * 获取某个radio元素的选中的项的名称text
+ * @param {*} elementName name名称
+ */
+loserStarJsUtils.getSelectedForRadioText = function(elementName){
+  return $("input[name='"+elementName+"']:checked").text();
+}
 
 /**
  * 让某个radio元素的值选中，基于jquery
