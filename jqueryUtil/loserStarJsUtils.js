@@ -1,5 +1,8 @@
 /**
  * version:20181210
+ * author：loserStar
+ * github:https://github.com/xinxin321198/loserStarJsUtils
+ * emial:362527240@qq.com
  */
 var loserStarJsUtils = {};
 
@@ -339,13 +342,6 @@ loserStarJsUtils.setSelectedForSelect = function (selector,value) {
 loserStarJsUtils.getSelectedForRadio = function(elementName){
   return $("input[name='"+elementName+"']:checked").val();
 }
-/**
- * 获取某个radio元素的选中的项的名称text
- * @param {*} elementName name名称
- */
-loserStarJsUtils.getSelectedForRadioText = function(elementName){
-  return $("input[name='"+elementName+"']:checked").text();
-}
 
 /**
  * 让某个radio元素的值选中，基于jquery
@@ -363,6 +359,28 @@ loserStarJsUtils.setSelectedForRadio_forJqueryMobile = function(name,value){
 	$("input[name='"+name+"'][value='"+value+"'] ").attr("checked",true).checkboxradio("refresh");
 }
 
+loserStarJsUtils.disabledForRadio = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", true);    ;
+  });
+}
+
+loserStarJsUtils.enabledForRadio = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", false);
+  });
+}
+loserStarJsUtils.disabledForRadio_forJqueryMobile = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", true).checkboxradio( "refresh" );    ;
+  });
+}
+
+loserStarJsUtils.enabledForRadio_forJqueryMobile = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", false).checkboxradio( "refresh" );
+  });
+}
 
 
 /**
@@ -387,6 +405,8 @@ loserStarJsUtils.getSelectedValueForSelect1 = function (selector){
 loserStarJsUtils.getSelectedValueForSelect2 = function (selector){
    return $(selector).val();
 }
+
+
 
 /**
  * textarea自动高度
@@ -528,4 +548,27 @@ loserStarJsUtils.setSelectedForCheckbox = function(elmentName,valueList){
 loserStarJsUtils.setSelectedForCheckbox_forJqueryMobile = function(elmentName,valueList){
   loserStarJsUtils.setSelectedForCheckbox(elmentName,valueList);
   $("input[name='"+elmentName+"']").checkboxradio("refresh");
+}
+
+loserStarJsUtils.disabledForCheckbox = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", true);    ;
+  });
+}
+
+loserStarJsUtils.enabledForCheckbox = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", false);
+  });
+}
+loserStarJsUtils.disabledForCheckbox_forJqueryMobile = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", true).checkboxradio( "refresh" );    ;
+  });
+}
+
+loserStarJsUtils.enabledForCheckbox_forJqueryMobile = function(name){
+  $("input[name=" + name + "]").each(function () {
+    $(this).attr("disabled", false).checkboxradio( "refresh" );
+  });
 }
