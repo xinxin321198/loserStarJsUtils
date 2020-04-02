@@ -595,3 +595,10 @@ loserStarJsUtils.enabledForCheckbox_forJqueryMobile = function(name){
     $(this).attr("disabled", false).checkboxradio( "refresh" );
   });
 }
+
+
+
+loserStarJsUtils.copyObj = function(o){
+	return JSON.parse(JSON.stringify(o));
+}
+
