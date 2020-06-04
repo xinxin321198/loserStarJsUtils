@@ -173,6 +173,42 @@ loserStarJsUtils.getMousePos = function(event) {
 }
 
 /**
+ * 得到浏览器窗口宽度
+ */
+loserStarJsUtils.getWinWidth = function () {
+  var winWidth = 0;
+  // 获取窗口宽度
+  if (window.innerWidth)
+    winWidth = window.innerWidth;
+  else if ((document.body) && (document.body.clientWidth)){
+    winWidth = document.body.clientWidth;
+  }
+  // 通过深入 Document 内部对 body 进行检测，获取窗口大小
+  if (document.documentElement && document.documentElement.clientWidth) {
+    winWidth = document.documentElement.clientWidth;
+  }
+  return winWidth;
+}
+
+/**
+ * 得到浏览器窗口宽度
+ */
+loserStarJsUtils.getWinHeight = function() {
+  var winHeight = 0;
+  // 获取窗口高度
+  if (window.innerHeight)
+      winHeight = window.innerHeight;
+  else if ((document.body) && (document.body.clientHeight)){
+    winHeight = document.body.clientHeight;
+  }
+  // 通过深入 Document 内部对 body 进行检测，获取窗口大小
+  if (document.documentElement && document.documentElement.clientHeight ) {
+      winHeight = document.documentElement.clientHeight;
+  }
+  return winHeight;
+}
+
+/**
  * 检测数据是否有值，有返回true，没有返回false
  * @param {*} o 
  */
