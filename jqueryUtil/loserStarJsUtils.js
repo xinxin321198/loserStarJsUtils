@@ -1,8 +1,10 @@
 /**
- * version:20181210
+ * version:20200731
  * author：loserStar
  * github:https://github.com/xinxin321198/loserStarJsUtils
  * emial:362527240@qq.com
+ * 新增了浏览器的版本检测
+ * 新增了获取浏览器窗口宽高的方法
  */
 var loserStarJsUtils = {};
 

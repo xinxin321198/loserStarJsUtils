@@ -1,4 +1,13 @@
 /**
+ * version:20200731
+ * author：loserStar
+ * github:https://github.com/xinxin321198/loserStarJsUtils
+ * emial:362527240@qq.com
+ * 新增了支持设置同步还是异步的请求
+ * 新增了处理返回值的公共方法（需特定的格式）
+ */
+
+/**
  * post提交json字符串数据
  * Content-Type: application/json
  */
@@ -90,4 +99,37 @@ function jsonToObj(str){
  */
 function jsonToObj_eval(str){
         return eval('(' + str + ')');
+}
+
+/**
+ * 公共的处理同步的请求返回值(成功返回data数据，失败用原始alert提示错误信息，并返回null)
+ * （基于VResult类的格式）
+ * {"flag":true,"msg":"成功","data":{}}
+ * @param {*} result 
+ */
+function returnSyncData(result) {
+        if (result.flag) {
+                return result.data;
+        } else {
+                alert(result.msg);
+                return null;
+        }
+}
+
+/**
+ * 公共的处理异步请求（成功会调用callback_ok回调，传入data数据，失败会调用callback_error,并返回错误信息及原始返回信息）
+ * （基于VResult类的格式）
+ * {"flag":true,"msg":"成功","data":{}}
+ * @param {*} result 
+ */
+function returnAsyncData(result,callback_ok,callback_error) {
+        if (result.flag) {
+                if(callback_ok){
+                        callback_ok(result.data);
+                }
+        } else {
+                if(callback_error){
+                        callback_error(result.msg,result);
+                }       
+        }
 }
