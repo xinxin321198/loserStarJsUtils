@@ -1,4 +1,4 @@
-var chooseUserWindowSelectedUserList= [];//窗口选中的人的数组集合
+var chooseUserWindowSelectedUserList = []; //窗口选中的人的数组集合
 var gridFilter = function() {
   var filtervalue = $('#inputValue').val();
   $('#userTreeGrid').jqxTreeGrid('clearFilters');
@@ -37,17 +37,13 @@ function expandRows(rows) {
   }
 }
 
-/**
- * 打开多选窗口（返回grid中所有的人）
- * 传入回调方法，回调方法接收选中的人id字符串集合，以逗号分隔
- */
 function OpenSelectUserWindow(callBack) {
-  chooseUserWindowSelectedUserList= [];
+  chooseUserWindowSelectedUserList = [];
   $('#ok').unbind('click'); //先移除事件再添加
   $('#ok').on('click', function() {
     var rows = $('#choosedUserGrid').jqxGrid('getRows');
     var userIds = '';
-    var lst=[];
+    var lst = [];
     $.each(rows, function(i, item) {
       if (item.userId != undefined && item.userId != 'undefined') {
         //很奇怪，不知道为什么表里有undefined，先加这一句观察一段时间看看
@@ -56,24 +52,20 @@ function OpenSelectUserWindow(callBack) {
         chooseUserWindowSelectedUserList.push(item);
       }
     });
-    userIds=lst.join(',');
+    userIds = lst.join(',');
     $('#ok').unbind('click');
     callBack(userIds);
   });
   $('#chooseUserWindow').jqxWindow('open');
 }
 
-/**
- * 打开多选窗口（返回grid中选中的人）
- * 传入回调方法，回调方法接收选中的人id字符串集合，以逗号分隔
- */
 function OpenSelectUserModeWindow(callBack) {
-  chooseUserWindowSelectedUserList= [];
+  chooseUserWindowSelectedUserList = [];
   $('#ok').unbind('click'); //先移除事件再添加
   $('#ok').on('click', function() {
     var rowindexes = $('#choosedUserGrid').jqxGrid('getselectedrowindexes');
     if (rowindexes.length > 0) {
-    	 var lst=[];
+      var lst = [];
       var userIds = '';
       for (var i = 0; i < rowindexes.length; i++) {
         var data = $('#choosedUserGrid').jqxGrid('getrowdata', rowindexes[i]);
@@ -81,7 +73,7 @@ function OpenSelectUserModeWindow(callBack) {
         lst.push(data.userId);
         chooseUserWindowSelectedUserList.push(data);
       }
-      userIds=lst.join(',');
+      userIds = lst.join(',');
       $('#ok').unbind('click');
       callBack(userIds);
     } else {
@@ -93,11 +85,10 @@ function OpenSelectUserModeWindow(callBack) {
 }
 
 /**
- * 打开单选窗口
- * 传入回调方法，回调方法接收选中的人id字符串集合，以逗号分隔
+ * 打开单选人的窗口
  */
 function OpenSelectUserSingleModeWindow(callBack) {
-  chooseUserWindowSelectedUserList= [];
+  chooseUserWindowSelectedUserList = [];
   $('#ok').unbind('click'); //先移除事件再添加
   $('#ok').on('click', function() {
     var rowindexes = $('#choosedUserGrid').jqxGrid('getselectedrowindexes');
@@ -108,7 +99,11 @@ function OpenSelectUserSingleModeWindow(callBack) {
       $('#ok').unbind('click');
       callBack(userIds);
     } else {
+      //alert('请选择一个有效的用户数据！');
+      alert('只能提交给一个用户！');
+
       alert('此窗口为单选用户窗口，请选择一个有效的用户数据，不允许选择多个！');
+
       return;
     }
   });
@@ -116,30 +111,75 @@ function OpenSelectUserSingleModeWindow(callBack) {
 }
 
 /**
- * 打开单选窗口，并指定弹出window的标题名称
+ * 打开单元人的窗口，并且不允许从组织结构自由选择人员，只能选择后端提供的默认待选取的人员
  */
-function OpenSelectUserSingleModeWindow_title(title,isClear,callBack){
-  $('#chooseUserWindow').jqxWindow('setTitle',title);
+function OpenSelectUserSingleModeWindowNotOrg(callBack) {
+  chooseUserWindowSelectedUserList = [];
+  $('#ok').unbind('click'); //先移除事件再添加
+  $('#ok').on('click', function() {
+    var rowindexes = $('#choosedUserGrid').jqxGrid('getselectedrowindexes');
+    if (rowindexes.length == 1) {
+      var item = $('#choosedUserGrid').jqxGrid('getrowdata', rowindexes[0]);
+      var userIds = item.userId;
+      chooseUserWindowSelectedUserList.push(item);
+      $('#ok').unbind('click');
+      callBack(userIds);
+    } else {
+      //alert('请选择一个有效的用户数据！');
+      alert('只能提交给一个用户！');
+
+      alert('此窗口为单选用户窗口，请选择一个有效的用户数据，不允许选择多个！');
+
+      return;
+    }
+  });
+  $('#chooseUserWindow').jqxWindow('open');
+  $("#treePanel").hide();
+  $("#inputUser").hide();
+}
+
+/**
+ * 以单选人员模态对话框显示，并指定弹出window的标题名称
+ */
+function OpenSelectUserSingleModeWindow_title(title, callBack) {
+  $('#chooseUserWindow').jqxWindow('setTitle', title);
   OpenSelectUserSingleModeWindow(callBack);
-  if(isClear==1){
-    initChoosedUserGrid(null,1);
-    $('#choosedUserGrid').jqxGrid('clearselection');
-  }
 }
 /**
- * 打开单选窗口，并指定弹出window的标题名称
+ * 以多选人员模态对话框显示，并制定弹出window的标题名称
  */
-function OpenSelectUserModeWindow_title(title,isClear,callBack){
-  $('#chooseUserWindow').jqxWindow('setTitle',title);
+function OpenSelectUserModeWindow_title(title, callBack) {
+  $('#chooseUserWindow').jqxWindow('setTitle', title);
   OpenSelectUserModeWindow(callBack);
-  if(isClear==1){
-    initChoosedUserGrid(null,1);
-    $('#choosedUserGrid').jqxGrid('clearselection');
-  }
-  
+}
+
+/**
+ * 以多选人员模态对话框显示，并制定弹出window的标题名称,并可以设置默认的人员
+ */
+function OpenSelectUserModeWindow_title_defaltUser(
+  title,
+  defaultUserUrl,
+  callBack
+) {
+  $('#chooseUserWindow').jqxWindow('setTitle', title);
+  OpenSelectUserModeWindow(callBack);
+  initChoosedUserGrid(defaultUserUrl);
+}
+
+/**
+ * 以单选人员模态对话框显示，并指定弹出window的标题名称，并可以设置默认的人员
+ */
+function OpenSelectUserSingleModeWindow_title_defaltUser(
+  title,
+  defaultUserUrl,
+  callBack
+) {
+  $('#chooseUserWindow').jqxWindow('setTitle', title);
+  OpenSelectUserSingleModeWindow(callBack);
+  initChoosedUserGrid(defaultUserUrl);
 }
 /**
- * 
+ *
  * @param {*} title 标题
  * @param {*} orgUrl 整个组织机构连接（可以使用 erphrinfo/getHRTreeData.do）
  * @param {*} defaultUserUrl 默认人员的链接
@@ -309,105 +349,52 @@ function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
           userName: row.name,
         });
       }
+    } else {
+      if (
+        !(
+          row.f_id == '12530401' ||
+          row.f_id == '00005198' ||
+          row.f_id == '00005298' ||
+          row.f_id == '00005398' ||
+          row.f_id == '00005498'
+        )
+      ) {
+        if (confirm('确定添加该部门下的所有员工吗？')) {
+          recursionAddUser(row.records);
+        }
+      }
     }
   });
-  initChoosedUserGrid(defaultUserUrl,chooseType);
-}
 
-/**
- * 初始化选择人员的grid
- * @param {*} defaultUserUrl 默认显示到列表上的人员链接
- * @param {*} chooseType 选择类型，1checkbox类型
- * @param {*} isClear 是否清空上次所中的项
- */
-function initChoosedUserGrid(defaultUserUrl,chooseType){
-  var source = {
-    datatype: 'json',
-    datafields: [
-      {
-        name: 'userId',
-        type: 'string',
-      },
-      {
-        name: 'userName',
-        type: 'string',
-      },
-    ],
-    deleterow: function(rowid, commit) {
-      commit(true);
-    },
-  };
+  initChoosedUserGrid(defaultUserUrl);
 
-  var dataAdapter = new $.jqx.dataAdapter(source);
-
-  $('#choosedUserGrid').jqxGrid({
-    width: 480,
-    height: '368px',
-    sortable: true,
-    source: dataAdapter,
-    altrows: true,
-    editable: true,
-    enabletooltips: true,
-    columns: [
-      {
-        text: '人员编号',
-        cellsalign: 'center',
-        datafield: 'userId',
-        width: 130,
-        editable: false,
-        align: 'center',
-      },
-      {
-        text: '人员姓名',
-        cellsalign: 'center',
-        editable: false,
-        datafield: 'userName',
-        align: 'center',
-      },
-      {
-        text: '操作',
-        datafield: 'edit',
-        columntype: 'button',
-        width: 100,
-        align: 'center',
-        cellsrenderer: function() {
-          return '删除';
-        },
-        buttonclick: function(row) {
-          var id = $('#choosedUserGrid').jqxGrid('getrowid', row);
-          $('#choosedUserGrid').jqxGrid('deleterow', id);
-        },
-      },
-    ],
-  });
-
-  if (defaultUserUrl != null) {
-    $.ajax({
-      url: defaultUserUrl,
-      type: 'POST',
-      async: false,
-      success: function(data) {
-        if (data.length > 0) {
-          for (var i in data) {
-            $('#choosedUserGrid').jqxGrid('addrow', data[i].userid, {
-              userId: data[i].userid,
-              userName: data[i].username,
-              userType: data[i].usertype,
-            });
-          }
-        }
-      },
-      error: function(a, b, c) {
-        alert('初始化默认人员失败！');
-      },
-    });
-  }
-  //是否使用checkbox
   if (chooseType == 1) {
     $('#choosedUserGrid').jqxGrid({
       selectionmode: 'checkbox',
     });
   }
+}
+
+function recursionAddUser(nodes) {
+  $.each(nodes, function(i, node) {
+    if (node.rtype == 'P') {
+      var rows = $('#choosedUserGrid').jqxGrid('getRows');
+      var bFlag = true;
+      $.each(rows, function(j, record) {
+        if (record.userId == node.f_id) {
+          bFlag = false;
+        }
+      });
+      if (bFlag) {
+        $('#choosedUserGrid').jqxGrid('addrow', node.f_id, {
+          userId: node.f_id,
+          userName: node.name,
+        });
+      }
+    } else {
+      recursionAddUser(node.records);
+    }
+  });
 }
 
 function initCheckTree() {
@@ -477,20 +464,97 @@ function initCheckTree() {
     });
 }
 
-/**
- * 得到选中的人的数组
- */
-function getChooseUserWindowSelectedUserList(){
-  return chooseUserWindowSelectedUserList;
+function initChoosedUserGrid(defaultUserUrl) {
+  var source = {
+    datatype: 'json',
+    datafields: [
+      {
+        name: 'userId',
+        type: 'string',
+      },
+      {
+        name: 'userName',
+        type: 'string',
+      },
+    ],
+    deleterow: function(rowid, commit) {
+      commit(true);
+    },
+  };
+
+  var dataAdapter = new $.jqx.dataAdapter(source);
+  $('#choosedUserGrid').jqxGrid({
+    width: 480,
+    height: '368px',
+    sortable: true,
+    source: dataAdapter,
+    altrows: true,
+    editable: true,
+    enabletooltips: true,
+    columns: [
+      {
+        text: '人员编号',
+        cellsalign: 'center',
+        datafield: 'userId',
+        width: 130,
+        editable: false,
+        align: 'center',
+      },
+      {
+        text: '人员姓名',
+        cellsalign: 'center',
+        editable: false,
+        datafield: 'userName',
+        align: 'center',
+      },
+      {
+        text: '操作',
+        hidden:true,
+        datafield: 'edit',
+        columntype: 'button',
+        width: 100,
+        align: 'center',
+        cellsrenderer: function() {
+          return '删除';
+        },
+        buttonclick: function(row) {
+          var id = $('#choosedUserGrid').jqxGrid('getrowid', row);
+          $('#choosedUserGrid').jqxGrid('deleterow', id);
+        },
+      },
+    ],
+  });
+
+  if (
+    defaultUserUrl != undefined &&
+    defaultUserUrl != null &&
+    defaultUserUrl != ''
+  ) {
+    $.ajax({
+      url: defaultUserUrl,
+      type: 'POST',
+      async: false,
+      success: function(data) {
+        if (data.length > 0) {
+          for (var i in data) {
+            $('#choosedUserGrid').jqxGrid('addrow', data[i].userid, {
+              userId: data[i].userid,
+              userName: data[i].username,
+              userType: data[i].usertype,
+            });
+          }
+        }
+      },
+      error: function(a, b, c) {
+        alert('初始化默认人员失败！');
+      },
+    });
+  }
 }
 
 /**
- * 清空已选的人
+ * 得到选中的人的数组
  */
-function clearUserWindow(){
-  // chooseUserWindowSelectedUserList = [];
-  //  $('#choosedUserGrid').jqxGrid('clearselection');
-  // $('#choosedUserGrid').jqxGrid('updateBoundData');
-
-
+function getChooseUserWindowSelectedUserList() {
+  return chooseUserWindowSelectedUserList;
 }

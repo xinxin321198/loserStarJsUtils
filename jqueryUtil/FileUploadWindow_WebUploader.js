@@ -4,10 +4,12 @@
  * @param fileListSelector 窗口内上传的文件列表的list容器的css选择器
  * @param pickBtnSelector 文件选择按钮的容器的css选择器
  * @param uploadBtnSelector 开始上传按钮的容器的css选择器
- * @param url 默认的上传的处理地址（如果需上传时候才传入，可通过checkDataCallBack中调用fileUploadWindow_uploader_obj.options.server改变url）
+ * @param url 默认的上传的处理地址（如果需上传时候才传入，可通过调用fileUploadWindow_uploader_obj.options.server改变url，或参看初始化之后的对象里的open或setUploadUrl方法）
  * @param callBack 上传的完成的回调函数
- * @param checkDataCallBack 上传前检测数据合法性的回调函数
- * @returns 返回一个储存基本信息的对象，里面有个open方法可以打开这个窗口
+ * @param checkDataCallBack 上传前检测数据合法性的回调函数（可以前置的处理一些东西）
+ * @returns 返回一个储存基本信息的对象，里面有个open(String)方法可以打开这个窗口，还可以指定一个新的url替换掉初始化的那个，setUploadUrl(newUrl)是改变url的方法
+ * 
+ * 
  */
 var FileUploadWindow_WebUploader={};//当做包名进行数据隔离，防止变量名污染
 FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSelector,pickBtnSelector,uploadBtnSelector,url,okCallBack,errorCallBack,checkDataCallBack) {
@@ -18,9 +20,12 @@ FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSe
 	tempWindow.uploadBtnSelector = uploadBtnSelector;//开始上传按钮的css选择器
 	tempWindow.url = url;//默认的url
 	//添加打开方法
-	tempWindow.open = function (){
+	tempWindow.open = function (newUrl){
 		var tempFileWindow = this;
-		  $("#"+tempFileWindow.windowId).jqxWindow('open');
+		if(tempFileWindow.fileUploadWindow_uploader_obj&&newUrl){
+			tempFileWindow.fileUploadWindow_uploader_obj.options.server = newUrl;
+		}
+		$("#"+tempFileWindow.windowId).jqxWindow('open');
 	}
 	//添加设置url的方法
 	tempWindow.setUploadUrl = function(newUrl){
