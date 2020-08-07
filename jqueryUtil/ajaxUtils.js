@@ -125,11 +125,11 @@ function returnSyncData(result) {
 function returnAsyncData(result,callback_ok,callback_error) {
         if (result.flag) {
                 if(callback_ok){
-                        callback_ok(result.data);
+                        callback_ok(result.data,result.msg,result);
                 }
         } else {
                 if(callback_error){
-                        callback_error(result.msg,result);
+                        callback_error(result.data,result.msg,result);
                 }       
         }
 }
