@@ -1,5 +1,5 @@
 /**
- * version:20200731
+ * version:20200821
  * author：loserStar
  * github:https://github.com/xinxin321198/loserStarJsUtils
  * emial:362527240@qq.com
@@ -10,6 +10,11 @@
 /**
  * post提交json字符串数据
  * Content-Type: application/json
+ * @param url 请求的url
+ * @param data 请求的参数
+ * @param dataType 预计的返回值类型
+ * @param callBack 请求成功200时候的回调方法
+ * @param isAsync true 异步调用，false 同步调用，默认为true
  */
 function postJson(url,data,dataType,callBack,isAsync){
         if(undefined==isAsync||null==isAsync){isAsync = true;}
@@ -23,9 +28,16 @@ function postJson(url,data,dataType,callBack,isAsync){
         async:isAsync
      }); 
 }
+
 /**
  * post提交json对象
  * Content-Type: application/x-www-form-urlencoded
+ * @param url 请求的url
+ * @param data 请求的参数
+ * @param dataType 预计的返回值类型
+ * @param callBack 请求成功200时候的回调方法
+ * @param isAsync true 异步调用，false 同步调用，默认为true
+ * @returns
  */
 function postObj(url,data,dataType,callBack,isAsync){
         if(undefined==isAsync||null==isAsync){isAsync = true;}
@@ -41,11 +53,11 @@ function postObj(url,data,dataType,callBack,isAsync){
 }
 
 /**
- * form表单转为json提交
- * @param {} url 
- * @param {*} formSelector 
- * @param {*} dataType 
- * @param {*} callBack 
+ * form表单转为json提交（该方法为异步调用）
+ * @param {} url 请求的url
+ * @param {*} formSelector 表单节点的css选择器
+ * @param {*} dataType 预计的返回值类型
+ * @param {*} callBack 请求成功200时候的回调方法
  */
 function submitFormToJson(url,formSelector,dataType,callBack){
         postJson(url, formToJson_jquerySerializeJSON(formSelector),dataType, callBack);
@@ -53,7 +65,7 @@ function submitFormToJson(url,formSelector,dataType,callBack){
 
 /**
  * form转为json对象(原始方式)
- * @param {*} formSelector 
+ * @param {*} formSelector  表单节点的css选择器
  */
 function formToJson(formSelector){
         var data = {};
@@ -67,7 +79,7 @@ function formToJson(formSelector){
 
 /**
  * form转为json对象(插件方式https://github.com/marioizquierdo/jquery.serializeJSON)
- * @param {*} formSelector 
+ * @param {*} formSelector 表单节点的css选择器
  */
 function formToJson_jquerySerializeJSON(formSelector){
         return $(formSelector).serializeJSON();
