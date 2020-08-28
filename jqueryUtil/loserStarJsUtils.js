@@ -280,6 +280,17 @@ loserStarJsUtils.replaceAll = function(sourceStr,search, replacement) {
 };
 
 /**
+ * 获取除了undefined和null之外的值
+ */
+loserStarJsUtils.getNotNULLVal= function(o){
+	if(o ==undefined||o==null){
+		return "";
+	}else{
+		return o;
+	}
+}
+
+/**
  * 把某个checkbox里选中的值以逗号分隔放入第二个参数的元素的value上
  * @param checkBoxName
  * @param strSelector
