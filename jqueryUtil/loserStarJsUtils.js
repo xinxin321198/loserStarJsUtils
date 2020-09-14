@@ -686,8 +686,30 @@ loserStarJsUtils.enabledForCheckbox_forJqueryMobile = function(name){
 }
 
 
-
+/**
+ * 深拷贝js对象（转为json字符串，再转回去。缺点：a. 如果你的对象里有函数, 函数无法被拷贝下来   b. 无法拷贝copyObj对象原型链上的属性和方法）
+ */
 loserStarJsUtils.copyObj = function(o){
 	return JSON.parse(JSON.stringify(o));
 }
 
+
+
+
+/**
+ * 深拷贝JS对象2(此方法原样copy对象，包括对象中的属性，方法等)
+ * 深拷贝JS对象  深拷贝, 就是遍历那个被拷贝的对象。判断对象里每一项的数据类型。如果不是对象类型, 就直接赋值, 如果是对象类型, 就再次调用递归的方法去赋值。
+ */
+loserStarJsUtils.copyObj2 = function(obj) {
+    var result, oClass = Object.prototype.toString.call(obj).slice(8, -1);
+    if (oClass == "Object") result = {}; //判断传入的如果是对象，继续遍历
+    else if (oClass == "Array") result = []; //判断传入的如果是数组，继续遍历
+    else return obj; //如果是基本数据类型就直接返回
+    for (var i in obj) {
+        var copy = obj[i];
+        if (Object.prototype.toString.call(obj).slice(8, -1) == "Object") result[i] = loserStarJsUtils.copyObj2(copy); //递归方法 ，如果对象继续变量obj[i],下一级还是对象，就obj[i][i]
+        else if (Object.prototype.toString.call(obj).slice(8, -1) == "Array") result[i] = loserStarJsUtils.copyObj2(copy); //递归方法 ，如果对象继续数组obj[i],下一级还是数组，就obj[i][i]
+        else result[i] = copy; //基本数据类型则赋值给属性
+    }
+    return result;
+}
