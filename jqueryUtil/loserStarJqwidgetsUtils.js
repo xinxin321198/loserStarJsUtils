@@ -8,29 +8,31 @@ var loserStarJqwidgetsUtils = {}
  * @return 返回剔除掉字段后的对象
  */
 loserStarJqwidgetsUtils.getOriginalData = function(oldO, isNewObj) {
-	var newO = oldO;
-	if (isNewObj) {
-		// 深拷贝出一个新的对象
-		newO = loserStarJsUtils.copyObj2(oldO);
-	}
-	if (Array.prototype.isPrototypeOf(newO)) {
-		for (var i = 0; i < newO.length; i++) {
-			newO[i] = loserStarJqwidgetsUtils.getOriginalData(newO[i]);
+		var newO = oldO;
+		if(oldO){
+			if (isNewObj) {
+				// 深拷贝出一个新的对象
+				newO = loserStarJsUtils.copyObj2(oldO);
+			}
+			if (Array.prototype.isPrototypeOf(newO)) {
+				for (var i = 0; i < newO.length; i++) {
+					newO[i] = loserStarJqwidgetsUtils.getOriginalData(newO[i]);
+				}
+			} else {
+				if (newO.hasOwnProperty("boundindex")) {
+					delete (newO.boundindex);
+				}
+				if (newO.hasOwnProperty("uid")) {
+					delete (newO.uid);
+				}
+				if (newO.hasOwnProperty("uniqueid")) {
+					delete (newO.uniqueid);
+				}
+				if (newO.hasOwnProperty("visibleindex")) {
+					delete (newO.visibleindex);
+				}
+			}
 		}
-	} else {
-		if (newO.hasOwnProperty("boundindex")) {
-			delete (newO.boundindex);
-		}
-		if (newO.hasOwnProperty("uid")) {
-			delete (newO.uid);
-		}
-		if (newO.hasOwnProperty("uniqueid")) {
-			delete (newO.uniqueid);
-		}
-		if (newO.hasOwnProperty("visibleindex")) {
-			delete (newO.visibleindex);
-		}
-	}
 	return newO;
 }
 
