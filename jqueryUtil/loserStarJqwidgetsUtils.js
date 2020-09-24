@@ -57,3 +57,35 @@ loserStarJqwidgetsUtils.hideLoading = function(){
         $('#jqxLoader').jqxLoader('close');
     }
 }
+
+/**
+ * 获取某个jqxGrid里面的选中的单行数据
+ */
+loserStarJqwidgetsUtils.getSelectedGridRow =function(gridIdSelector,errorMsg){
+	var selected_index = $(gridIdSelector).jqxGrid("getselectedrowindex");
+	if (selected_index == undefined || selected_index == null || selected_index <= 0) { 
+		kaen_alert.alertError(errorMsg);
+		return null;
+	}
+	var row = $(gridIdSelector).jqxGrid('getrowdata', selected_index);
+	return row;
+}
+
+/**
+ * 获取某个jqxGrid里面的选中的单行数据
+ */
+loserStarJqwidgetsUtils.getSelectedGridRows = function (gridIdSelector, errorMsg) {
+	var rows = null;
+	var selected_indexs = $(gridIdSelector).jqxGrid('getselectedrowindexes');
+	if (selected_indexs == undefined || selected_indexs == null || selected_indexs <= 0) { 
+		kaen_alert.alertError(errorMsg);
+		return null;
+	}
+	for (var i = 0; i < selected_indexs.length; i++) {
+		var index = selected_indexs[i];
+		var row = $(gridIdSelector).jqxGrid('getrowdata', index);
+		if(!rows){rows = [];}
+		rows.push(row);
+	}
+	return rows;
+}
