@@ -11,6 +11,19 @@
  * @returns 返回一个储存基本信息的对象，里面有个open(String)方法可以打开这个窗口，还可以指定一个新的url替换掉初始化的那个，setUploadUrl(newUrl)是改变url的方法
  * 
  * 
+ * <div id="uploadWindow_gt06" style="display:none">
+            <div>
+            	<span>上传附件</span>
+            </div>
+            <div id="uploader_gt06" class="wu-example">
+                <div>待上传文件列表</div>
+			    <div id="thelist_gt06" class="uploader-list"></div>
+			    <div class="btns">
+			        <div id="picker_gt06">选择文件</div>
+			        <button id="ctlBtn_gt06" class="btn btn-success" style="color: #fff;background-color: #31b0d5;border-color: #269abc;">开始上传</button>
+			    </div>
+			</div>
+    </div>
  */
 var FileUploadWindow_WebUploader={};//当做包名进行数据隔离，防止变量名污染
 FileUploadWindow_WebUploader.initFileUploadWindow= function (windowId,fileListSelector,pickBtnSelector,uploadBtnSelector,url,okCallBack,errorCallBack,checkDataCallBack) {
