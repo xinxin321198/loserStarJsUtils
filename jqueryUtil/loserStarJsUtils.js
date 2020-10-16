@@ -690,7 +690,7 @@ loserStarJsUtils.enabledForCheckbox_forJqueryMobile = function(name){
  * @param selector
  * @returns
  */
-function setReadOnly(selector) {
+loserStarJsUtils.setReadOnly = function(selector) {
     $(selector).removeClass("kaen-formtable-input-write");
     $(selector).attr("readonly", "readonly");
 }
@@ -700,7 +700,7 @@ function setReadOnly(selector) {
  * @param selector
  * @returns
  */
-function setWrite(selector) {
+loserStarJsUtils.setWrite = function(selector) {
     $(selector).removeAttr("readonly");
     $(selector).attr("class", "kaen-formtable-input-write");
 }
@@ -710,7 +710,7 @@ function setWrite(selector) {
  * @param selector
  * @returns
  */
-function setWriteClass(selector) {
+loserStarJsUtils.setWriteClass = function(selector) {
     $(selector).attr("class", "kaen-formtable-input-write");
 }
 
