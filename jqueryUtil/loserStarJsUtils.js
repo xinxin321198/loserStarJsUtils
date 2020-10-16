@@ -714,6 +714,22 @@ loserStarJsUtils.setWriteClass = function(selector) {
     $(selector).attr("class", "kaen-formtable-input-write");
 }
 
+/**
+ * 设置禁用，两种方法设置
+ */
+loserStarJsUtils.setDisabled = function(selector) {
+	$(selector).attr("disabled",true);
+//	$(selector).attr("disabled","disabled");
+}
+
+/**
+ * 设置启用，三种方法移除disabled属性
+ */
+loserStarJsUtils.setEnabled = function(selector) {
+	$(selector).attr("disabled",false);
+//	$(selector).removeAttr("disabled");
+//	$(selector).attr("disabled","");
+}
 
 /**
  * 深拷贝js对象（转为json字符串，再转回去。缺点：a. 如果你的对象里有函数, 函数无法被拷贝下来   b. 无法拷贝copyObj对象原型链上的属性和方法）
