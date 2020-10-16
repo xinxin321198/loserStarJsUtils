@@ -685,6 +685,35 @@ loserStarJsUtils.enabledForCheckbox_forJqueryMobile = function(name){
   });
 }
 
+/**
+ * 设置元素的readonly属性，并且添加白色的背景色class
+ * @param selector
+ * @returns
+ */
+function setReadOnly(selector) {
+    $(selector).removeClass("kaen-formtable-input-write");
+    $(selector).attr("readonly", "readonly");
+}
+
+/**
+ * 移除元素的readonly属性，并且添加黄色的背景色class
+ * @param selector
+ * @returns
+ */
+function setWrite(selector) {
+    $(selector).removeAttr("readonly");
+    $(selector).attr("class", "kaen-formtable-input-write");
+}
+
+/**
+ * 仅添加黄色的背景色样式
+ * @param selector
+ * @returns
+ */
+function setWriteClass(selector) {
+    $(selector).attr("class", "kaen-formtable-input-write");
+}
+
 
 /**
  * 深拷贝js对象（转为json字符串，再转回去。缺点：a. 如果你的对象里有函数, 函数无法被拷贝下来   b. 无法拷贝copyObj对象原型链上的属性和方法）
