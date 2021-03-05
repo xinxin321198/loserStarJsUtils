@@ -758,3 +758,44 @@ loserStarJsUtils.copyObj2 = function(obj) {
     }
     return result;
 }
+
+/**
+ * 密码强度校验，返回一个密码强度级别的数字
+ * 0：表示第一个级别 长度小于8位
+ * 1：表示第二个级别 长度大于等于8位，且包含了数字、小写字母、大写字母、特殊字符 任意1种
+ * 2：表示第三个级别 长度大于等于8位，且包含了数字、小写字母、大写字母、特殊字符 任意2种
+ * 3：表示第四个级别 长度大于等于8位，且包含了数字、小写字母、大写字母、特殊字符 任意3种
+ * 4：表示第五个级别 长度大于等于8位，且包含了数字、小写字母、大写字母、特殊字符 任意4种
+ */
+loserStarJsUtils.checkPassWord = function (value) {
+  var modes = 0;
+  if (value.length < 8) {//最初级别
+    return modes;
+  }
+  if (/\d/.test(value)) {//如果用户输入的密码 包含了数字
+    modes++;
+  }
+  if (/[a-z]/.test(value)) {//如果用户输入的密码 包含了小写的a到z
+    modes++;
+  }
+  if (/[A-Z]/.test(value)) {//如果用户输入的密码 包含了大写的A到Z
+    modes++;
+  }
+  if (/\W/.test(value)) {//如果是非数字 字母 下划线
+    modes++;
+  }
+  switch (modes) {
+    case 1:
+      return 1;
+      break;
+    case 2:
+      return 2;
+      break;
+    case 3:
+      return 3;
+      break;
+    case 4:
+      return 4;
+      break;
+  }
+}
