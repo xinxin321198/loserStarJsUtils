@@ -93,7 +93,6 @@ DeptSelectTree.init = function(){
             // create jqxTreeGrid.
             $(deptTreeTmp.treeGridSelector).jqxTreeGrid(
             {
-                width:'100%',
                 source: dataAdapter,
                     checkboxes: (deptTreeTmp.selectType == "checkbox" || deptTreeTmp.selectType == "checkboxChild")?true:false,
                     hierarchicalCheckboxes: deptTreeTmp.selectType == "checkboxChild"? true : false,
