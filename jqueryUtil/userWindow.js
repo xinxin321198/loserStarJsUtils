@@ -1,4 +1,7 @@
 var chooseUserWindowSelectedUserList = []; //窗口选中的人的数组集合
+/**
+ * 过滤器
+ */
 var gridFilter = function() {
   var filtervalue = $('#inputValue').val();
   $('#userTreeGrid').jqxTreeGrid('clearFilters');
@@ -20,14 +23,19 @@ var gridFilter = function() {
   $('#userTreeGrid').jqxTreeGrid('addFilter', field, filtergroup);
 
   $('#userTreeGrid').jqxTreeGrid('applyFilters');
-
   var viewRows = $('#userTreeGrid').jqxTreeGrid('getView');
   if (viewRows.length > 0 && filtervalue != '') {
     if (viewRows[0].records.length == 1) {
+      //查出来的子项是唯一的就展开
       expandRows(viewRows);
     }
   }
 };
+
+/**
+ * 展开树结构
+ * @param {*} rows 
+ */
 function expandRows(rows) {
   for (var i in rows) {
     if (rows[i].records != undefined) {
@@ -37,6 +45,12 @@ function expandRows(rows) {
   }
 }
 
+
+
+/**
+ * 常规打开选人窗口，只要右边待选列表有的人员都会返回（不常用）
+ * @param {*} callBack 传入点击确定的回调方法，该回调会接收所选择的人员id字符串，以逗号分隔
+ */
 function OpenSelectUserWindow(callBack) {
   chooseUserWindowSelectedUserList = [];
   $('#ok').unbind('click'); //先移除事件再添加
@@ -44,21 +58,29 @@ function OpenSelectUserWindow(callBack) {
     var rows = $('#choosedUserGrid').jqxGrid('getRows');
     var userIds = '';
     var lst = [];
+    var tempUserList = [];//保存用户信息的临时变量
     $.each(rows, function(i, item) {
       if (item.userId != undefined && item.userId != 'undefined') {
         //很奇怪，不知道为什么表里有undefined，先加这一句观察一段时间看看
         userIds += item.userId + ',';
         lst.push(item.userId);
-        chooseUserWindowSelectedUserList.push(item);
+        tempUserList.push(item);
       }
     });
     userIds = lst.join(',');
     $('#ok').unbind('click');
-    callBack(userIds);
+    
+    //检测是否包含大领导，包含就提示--beign--
+    checkBigLeaderCallback(userIds,tempUserList,callBack);
+    //检测是否包含大领导，包含就提示--end--
   });
   $('#chooseUserWindow').jqxWindow('open');
 }
 
+/**
+ * 打开选人窗口，右边待选列表会提供checkbox，勾上的才会返回（常用）
+ * @param {*} callBack 传入点击确定的回调方法，该回调会接收所选择的人员id字符串，以逗号分隔
+ */
 function OpenSelectUserModeWindow(callBack) {
   chooseUserWindowSelectedUserList = [];
   $('#ok').unbind('click'); //先移除事件再添加
@@ -67,15 +89,19 @@ function OpenSelectUserModeWindow(callBack) {
     if (rowindexes.length > 0) {
       var lst = [];
       var userIds = '';
+      var tempUserList = [];//保存用户信息的临时变量
       for (var i = 0; i < rowindexes.length; i++) {
         var data = $('#choosedUserGrid').jqxGrid('getrowdata', rowindexes[i]);
         userIds += data.userId + ',';
         lst.push(data.userId);
-        chooseUserWindowSelectedUserList.push(data);
+        tempUserList.push(data);
       }
       userIds = lst.join(',');
       $('#ok').unbind('click');
-      callBack(userIds);
+      
+      //检测是否包含大领导，包含就提示--beign--
+      checkBigLeaderCallback(userIds, tempUserList, callBack);
+      //检测是否包含大领导，包含就提示--end--
     } else {
       alert('请选择人员');
       return;
@@ -84,8 +110,10 @@ function OpenSelectUserModeWindow(callBack) {
   $('#chooseUserWindow').jqxWindow('open');
 }
 
+
 /**
- * 打开单选人的窗口
+ * 打开单选人的窗口，右边待选列表会提供checkbox，勾上的才会返回（常用）
+ * @param {*} callBack 传入点击确定的回调方法，该回调会接收所选择的人员id字符串，以逗号分隔
  */
 function OpenSelectUserSingleModeWindow(callBack) {
   chooseUserWindowSelectedUserList = [];
@@ -93,11 +121,15 @@ function OpenSelectUserSingleModeWindow(callBack) {
   $('#ok').on('click', function() {
     var rowindexes = $('#choosedUserGrid').jqxGrid('getselectedrowindexes');
     if (rowindexes.length == 1) {
+      var tempUserList = [];//保存用户信息的临时变量
       var item = $('#choosedUserGrid').jqxGrid('getrowdata', rowindexes[0]);
       var userIds = item.userId;
-      chooseUserWindowSelectedUserList.push(item);
+      tempUserList.push(item);
       $('#ok').unbind('click');
-      callBack(userIds);
+
+      //检测是否包含大领导，包含就提示--beign--
+      checkBigLeaderCallback(userIds, tempUserList, callBack);
+      //检测是否包含大领导，包含就提示--end--
     } else {
       //alert('请选择一个有效的用户数据！');
       alert('只能提交给一个用户！');
@@ -111,7 +143,7 @@ function OpenSelectUserSingleModeWindow(callBack) {
 }
 
 /**
- * 打开单元人的窗口，并且不允许从组织结构自由选择人员，只能选择后端提供的默认待选取的人员
+ * 打开单选人的窗口，右边待选列表会提供checkbox，勾上的才会返回，并且不允许从组织结构自由选择人员，只能选择后端提供的默认待选取的人员（常用）
  */
 function OpenSelectUserSingleModeWindowNotOrg(callBack) {
   chooseUserWindowSelectedUserList = [];
@@ -119,11 +151,15 @@ function OpenSelectUserSingleModeWindowNotOrg(callBack) {
   $('#ok').on('click', function() {
     var rowindexes = $('#choosedUserGrid').jqxGrid('getselectedrowindexes');
     if (rowindexes.length == 1) {
+      var tempUserList = [];//保存用户信息的临时变量
       var item = $('#choosedUserGrid').jqxGrid('getrowdata', rowindexes[0]);
       var userIds = item.userId;
-      chooseUserWindowSelectedUserList.push(item);
+      tempUserList.push(item);
       $('#ok').unbind('click');
-      callBack(userIds);
+
+      //检测是否包含大领导，包含就提示--beign--
+      checkBigLeaderCallback(userIds, tempUserList, callBack);
+      //检测是否包含大领导，包含就提示--end--
     } else {
       //alert('请选择一个有效的用户数据！');
       alert('只能提交给一个用户！');
@@ -187,22 +223,22 @@ function OpenSelectUserSingleModeWindow_title_defaltUser(
  */
 function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
   $('#chooseDockPanel').jqxDockPanel({
-    width: 788,
+    width: 900,
     height: 400,
     lastchildfill: true,
   });
   $('#chooseUserWindow').jqxWindow({
     autoOpen: false,
     draggable: true,
-    resizable: true,
+    resizable: false,
     showCollapseButton: true,
     maxHeight: 500,
     title: title,
-    maxWidth: 800,
+    maxWidth: 1366,
     minHeight: 200,
     minWidth: 200,
     height: 500,
-    width: 800,
+    width: 920,
     cancelButton: $('#cancel'),
     initContent: function() {
       $('#inputUser').jqxInput({
@@ -242,6 +278,7 @@ function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
     orgUrl = '../plan/getHRTreeData.do';
   }
 
+  //定义树的数据源
   var source = {
     dataType: 'json',
     async: true,
@@ -261,6 +298,14 @@ function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
       },
       {
         name: 'rtype',
+        type: 'string',
+      },
+      {
+        name: 'sobjname',
+        type: 'string',
+      },
+      {
+        name: 'plan_erp',
         type: 'string',
       },
     ],
@@ -291,7 +336,7 @@ function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
   window.winSuDataAdapter = dataAdapter;
 
   $('#userTreeGrid').jqxTreeGrid({
-    width: '100%',
+    width: 300,
     height: '100%',
     source: dataAdapter,
     icons: true,
@@ -328,6 +373,18 @@ function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
         width: 200,
         hidden: true,
       },
+      {
+        text: 'sobjname',
+        dataField: 'sobjname',
+        width: 200,
+        hidden: true,
+      },
+      {
+        text: 'plan_erp',
+        dataField: 'plan_erp',
+        width: 200,
+        hidden: true,
+      }
     ],
   });
 
@@ -337,17 +394,33 @@ function initUserWindow(title, orgUrl, defaultUserUrl, chooseType) {
 
     if (row.rtype == 'P') {
       var rows = $('#choosedUserGrid').jqxGrid('getRows');
-      var bFlag = true;
+      var bFlag = true;//检测是否已添加到待选列表了，默认没有（true）,查到如果已添加过就是false
       $.each(rows, function(i, record) {
         if (record.userId == row.f_id) {
           bFlag = false;
         }
       });
       if (bFlag) {
-        $('#choosedUserGrid').jqxGrid('addrow', row.f_id, {
-          userId: row.f_id,
-          userName: row.name,
-        });
+        if (checkIsBigLeader(row.plan_erp)){
+          if (confirm("当前选中的人“"+row.name+"”属于“" + getZwDjName(row.plan_erp)+"”，是否添加至右边待选列表？")){
+            $('#choosedUserGrid').jqxGrid('addrow', row.f_id, {
+              userId: row.f_id,
+              userName: row.name,
+              sobjname: row.sobjname,
+              plan_erp: row.plan_erp,
+              plan_erp_name: getZwDjName(row.plan_erp),
+            });
+          }
+        }else{
+          $('#choosedUserGrid').jqxGrid('addrow', row.f_id, {
+            userId: row.f_id,
+            userName: row.name,
+            sobjname: row.sobjname,
+            plan_erp: row.plan_erp,
+            plan_erp_name: getZwDjName(row.plan_erp),
+          });
+        }
+  
       }
     } else {
       if (
@@ -389,6 +462,9 @@ function recursionAddUser(nodes) {
         $('#choosedUserGrid').jqxGrid('addrow', node.f_id, {
           userId: node.f_id,
           userName: node.name,
+          sobjname: node.sobjname,
+          plan_erp: node.plan_erp,
+          plan_erp_name: getZwDjName(node.plan_erp),
         });
       }
     } else {
@@ -397,6 +473,7 @@ function recursionAddUser(nodes) {
   });
 }
 
+/**没有用到（lxx：20201130） */
 function initCheckTree() {
   var bCanCheck = true;
   $('#userTreeGrid').jqxTreeGrid({
@@ -476,6 +553,19 @@ function initChoosedUserGrid(defaultUserUrl) {
         name: 'userName',
         type: 'string',
       },
+      {
+        name: 'sobjname',
+        type: 'string',
+      },
+      {
+        name: 'plan_erp',
+        type: 'string',
+      },
+      ,
+      {
+        name: 'plan_erp_name',
+        type: 'string',
+      }
     ],
     deleterow: function(rowid, commit) {
       commit(true);
@@ -484,9 +574,10 @@ function initChoosedUserGrid(defaultUserUrl) {
 
   var dataAdapter = new $.jqx.dataAdapter(source);
   $('#choosedUserGrid').jqxGrid({
-    width: 480,
+    width: 592,
     height: '368px',
-    sortable: true,
+    sortable: false,
+    columnsresize: true,
     source: dataAdapter,
     altrows: true,
     editable: true,
@@ -505,6 +596,21 @@ function initChoosedUserGrid(defaultUserUrl) {
         cellsalign: 'center',
         editable: false,
         datafield: 'userName',
+        align: 'center',
+      },
+      {
+        text: '所属岗位',
+        cellsalign: 'center',
+        editable: false,
+        datafield: 'sobjname',
+        align: 'center',
+        width:200
+      },
+      {
+        text: '职位等级',
+        cellsalign: 'center',
+        editable: false,
+        datafield: 'plan_erp_name',
         align: 'center',
       },
       {
@@ -541,6 +647,9 @@ function initChoosedUserGrid(defaultUserUrl) {
               userId: data[i].userid,
               userName: data[i].username,
               userType: data[i].usertype,
+              sobjname: data[i].sobjname,
+              plan_erp: data[i].plan_erp,
+              plan_erp_name: data[i].plan_erp_name
             });
           }
         }
@@ -557,4 +666,113 @@ function initChoosedUserGrid(defaultUserUrl) {
  */
 function getChooseUserWindowSelectedUserList() {
   return chooseUserWindowSelectedUserList;
+}
+
+/**
+ * 检测当前用户的职位等级是否是大领导
+ * @param {*} plan_erp 
+ */
+function checkIsBigLeader(plan_erp){
+  var flag = false;
+  if ("K12"==plan_erp){
+    //工厂正职
+    flag = true;
+  }
+  if ("K13" == plan_erp) {
+    //工厂副职
+    flag = true;
+  }
+  if ("K14" == plan_erp) {
+    //工厂总监
+    flag = true;
+  }
+  if ("Z11" == plan_erp) {
+    //总裁/董事长/书记
+    flag = true;
+  }
+  if ("Z12" == plan_erp) {
+    //副总/副书记/主席
+    flag = true;
+  }
+  if ("Z13" == plan_erp) {
+    //正部级
+    flag = true;
+  }
+  if ("Z14" == plan_erp) {
+    //副部级
+    flag = true;
+  }
+  return flag;
+}
+
+/**
+ * 获取职位等级的名称
+ */
+function getZwDjName(plan_erp){
+  var zwDjName = "";
+  if ("K12" == plan_erp) {
+    //工厂正职
+    zwDjName = "工厂正职";
+  }
+  if ("K13" == plan_erp) {
+    //工厂副职
+    zwDjName = "工厂副职";
+  }
+  if ("K14" == plan_erp) {
+    //工厂总监
+    zwDjName = "工厂总监";
+  }
+  if ("Z11" == plan_erp) {
+    //总裁/董事长/书记
+    zwDjName = "总裁/董事长/书记";
+  }
+  if ("Z12" == plan_erp) {
+    //副总/副书记/主席
+    zwDjName = "副总/副书记/主席";
+  }
+  if ("Z13" == plan_erp) {
+    //正部级
+    zwDjName = "正部级";
+  }
+  if ("Z14" == plan_erp) {
+    //副部级
+    zwDjName = "副部级";
+  }
+  if ("Z15" == plan_erp) {
+    //正部级
+    zwDjName = "正科级";
+  }
+  if ("Z16" == plan_erp) {
+    //副部级
+    zwDjName = "副科级";
+  }
+  return zwDjName;
+}
+
+/**
+ * 附带检测是否是大领导提示弹出框的处理回调的方法
+ * @param {*} userIds 
+ * @param {*} tempUserList 
+ * @param {*} callBack 
+ */
+function checkBigLeaderCallback(userIds,tempUserList,callBack){
+  //检测是否包含大领导，包含就提示--beign--
+  var isHaveBigLeader = false
+  for (var i = 0; i < tempUserList.length; i++) {
+    if (tempUserList[i].plan_erp){
+      if (checkIsBigLeader(tempUserList[i].plan_erp)) {
+        isHaveBigLeader = true;
+      }
+    }
+  }
+  if (isHaveBigLeader) {
+    if (confirm("所选的人员当中包含有部级(含)以上领导，是否确定？")) {
+      chooseUserWindowSelectedUserList = tempUserList;
+      callBack(userIds);
+    }
+  } else {
+    chooseUserWindowSelectedUserList = tempUserList;
+    callBack(userIds);
+  }
+    //检测是否包含大领导，包含就提示--end--
 }
