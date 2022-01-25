@@ -799,3 +799,11 @@ loserStarJsUtils.checkPassWord = function (value) {
       break;
   }
 }
+
+loserStarJsUtils.emty = function (obj) {
+  if (obj == undefined || obj == null) {
+    return "";
+  } else {
+    return obj;
+  }
+}
