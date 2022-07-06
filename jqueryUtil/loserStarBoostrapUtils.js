@@ -37,3 +37,7 @@ loserStarBoostrapUtils.loading = function (title,content) {
         backdrop: 'static'//true:有遮罩，单击关闭，false:无遮罩,单击不会关闭，'static':有遮罩，单击不会关闭
     });
 }
+
+loserStarBoostrapUtils.closeLoading = function(){
+	$('#loserStarBoostrapUtils_loadingDlg').modal("hide");
+}
