@@ -524,7 +524,9 @@ loserStarJsUtils.getSelectedValueForSelect2 = function (selector){
  * textarea自动高度
  */
 loserStarJsUtils.autoTextAreaHeight = function (o) {
+  if(o){
     o.style.height = (o.scrollTop + o.scrollHeight +2)+ "px";
+  }
 }
 
 /**
