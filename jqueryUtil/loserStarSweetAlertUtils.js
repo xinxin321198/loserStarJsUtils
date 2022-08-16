@@ -25,6 +25,13 @@ loserStarSweetAlertUtils.alert = function(title,content,type){
 	swal(title,content,type);
 }
 
+/**
+ * 确认框，类似于alert
+ * @param {*} title 标题
+ * @param {*} content 内容
+ * @param {*} okCallback 确定的回调函数
+ * @param {*} cancelCallback 取消的回调函数
+ */
 loserStarSweetAlertUtils.confirm = function(title,content,okCallback,cancelCallback){
 	swal({
 	    title: title,
@@ -46,6 +53,14 @@ loserStarSweetAlertUtils.confirm = function(title,content,okCallback,cancelCallb
 	  });
 }
 
+/**
+ * 弹出能填写内容的提示框
+ * @param {*} title 标题
+ * @param {*} content 内容
+ * @param {*} placeholder input框中的提示
+ * @param {*} okCallback 确定后的回调函数
+ * @param {*} cancelCallback 取消时的回调函数（点击框外即取消）
+ */
 loserStarSweetAlertUtils.prompt = function(title, content, placeholder, okCallback,
 		cancelCallback) {
 	swal({
