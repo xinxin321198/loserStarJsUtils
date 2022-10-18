@@ -22,7 +22,14 @@ loserStarSweetAlertUtils.alertInfo = function(title,content){
 loserStarSweetAlertUtils.alert = function(title,content,type){
 	if(!title){title="";}
 	if(!content){content="";}
-	swal(title,content,type);
+	if (!title) { title = ""; }
+	if (!content) { content = ""; }
+	swal({
+		title: title,
+		icon: type,
+		text: content,
+		closeOnClickOutside: false,
+	});
 }
 
 /**
@@ -81,4 +88,50 @@ loserStarSweetAlertUtils.prompt = function(title, content, placeholder, okCallba
 		}
 	});
 	;
+}
+
+/**
+ * 自定义confirm
+ * @param {*} title 
+ * @param {*} content 
+ * @param {*} icon "warning" "error" "success" "info"
+ * @param {*} buttons buttons配置对象 
+ * @param {*} okCallback 点击其它选项时调用的回调方法，接收该按钮的value
+ * @param {*} cancelCallback 点击cancel时调用的回调方法 
+ * buttons: {
+			cancel: "取消",
+			ok: {
+				text: "赞成",
+				value: "1",
+				className: "btn-success",
+			}, opposeCount: {
+				text: "反对",
+				value: "0",
+				className: "btn-danger",
+			}, no: {
+				text: "弃权",
+				value: "2",
+				className: "btn-warning",
+			}
+		}
+ */
+loserStarSweetAlertUtils.confirmCus = function (title, content,icon,buttonsCfg,okCallback, cancelCallback) {
+	swal({
+		title: title,
+		text: content,
+		icon: icon,
+		buttons: buttonsCfg,
+		dangerMode: true,
+		closeOnClickOutside: false
+	}).then(function (will) {
+		if (will) {
+			if (okCallback) {
+				okCallback(will);
+			}
+		} else {
+			if (cancelCallback) {
+				cancelCallback();
+			}
+		}
+	});
 }
