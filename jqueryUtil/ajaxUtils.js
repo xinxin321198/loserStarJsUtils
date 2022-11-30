@@ -16,17 +16,17 @@
  * @param callBack 请求成功200时候的回调方法
  * @param isAsync true 异步调用，false 同步调用，默认为true
  */
-function postJson(url, data, dataType, callBack, isAsync) {
-        if (undefined == isAsync || null == isAsync) { isAsync = true; }
-        $.ajax({
-                type: "POST",
-                url: url,
-                dataType: dataType,
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(data),
-                success: callBack,
-                async: isAsync
-        });
+function postJson(url,data,dataType,callBack,isAsync){
+        if(undefined==isAsync||null==isAsync){isAsync = true;}
+	$.ajax({ 
+        type:"POST", 
+        url:url, 
+        dataType:dataType,      
+        contentType:"application/json; charset=utf-8",               
+        data:JSON.stringify(data), 
+        success:callBack,
+        async:isAsync
+     }); 
 }
 
 /**
@@ -39,17 +39,17 @@ function postJson(url, data, dataType, callBack, isAsync) {
  * @param isAsync true 异步调用，false 同步调用，默认为true
  * @returns
  */
-function postObj(url, data, dataType, callBack, isAsync) {
-        if (undefined == isAsync || null == isAsync) { isAsync = true; }
-        $.ajax({
-                type: "POST",
-                url: url,
-                dataType: dataType,
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                data: data,
-                success: callBack,
-                async: isAsync
-        });
+function postObj(url,data,dataType,callBack,isAsync){
+        if(undefined==isAsync||null==isAsync){isAsync = true;}
+	$.ajax({ 
+        type:"POST", 
+        url:url, 
+        dataType:dataType,      
+        contentType:"application/x-www-form-urlencoded; charset=utf-8",               
+        data:data, 
+        success:callBack,
+        async:isAsync
+     }); 
 }
 
 /**
@@ -59,20 +59,20 @@ function postObj(url, data, dataType, callBack, isAsync) {
  * @param {*} dataType 预计的返回值类型
  * @param {*} callBack 请求成功200时候的回调方法
  */
-function submitFormToJson(url, formSelector, dataType, callBack) {
-        postJson(url, formToJson_jquerySerializeJSON(formSelector), dataType, callBack);
+function submitFormToJson(url,formSelector,dataType,callBack){
+        postJson(url, formToJson_jquerySerializeJSON(formSelector),dataType, callBack);
 }
 
 /**
  * form转为json对象(原始方式)
  * @param {*} formSelector  表单节点的css选择器
  */
-function formToJson(formSelector) {
+function formToJson(formSelector){
         var data = {};
         var formArray = $(formSelector).serializeArray();
         for (var index = 0; index < formArray.length; index++) {
-                var element = formArray[index];
-                data[element.name] = element.value;
+            var element = formArray[index];
+            data[element.name] = element.value;
         }
         return data;
 }
@@ -81,7 +81,7 @@ function formToJson(formSelector) {
  * form转为json对象(插件方式https://github.com/marioizquierdo/jquery.serializeJSON)
  * @param {*} formSelector 表单节点的css选择器
  */
-function formToJson_jquerySerializeJSON(formSelector) {
+function formToJson_jquerySerializeJSON(formSelector){
         return $(formSelector).serializeJSON();
 }
 
@@ -91,7 +91,7 @@ function formToJson_jquerySerializeJSON(formSelector) {
 可以在https://github.com/douglascrockford/JSON-js上获取到这个js，一般现在用json2.js。
  * @param {*} obj 
  */
-function objToJson(obj) {
+function objToJson(obj){
         return JSON.stringify(obj); //可以将json对象转换成json对符串 
 }
 
@@ -101,7 +101,7 @@ function objToJson(obj) {
 可以在https://github.com/douglascrockford/JSON-js上获取到这个js，一般现在用json2.js。
  * @param {*} str 
  */
-function jsonToObj(str) {
+function jsonToObj(str){
         return JSON.parse(str); //jQuery.parseJSON(jsonstr),可以将json字符串转换成json对象 
 }
 /**
@@ -109,7 +109,7 @@ function jsonToObj(str) {
  * eval可以将json字符串转换成json对象,注意需要在json字符外包裹一对小括号 
 注：ie8(兼容模式),ie7和ie6也可以使用eval()将字符串转为JSON对象，但不推荐这些方式，这种方式不安全eval会执行json串中的表达式。 
  */
-function jsonToObj_eval(str) {
+function jsonToObj_eval(str){
         return eval('(' + str + ')');
 }
 
@@ -134,14 +134,14 @@ function returnSyncData(result) {
  * {"flag":true,"msg":"成功","data":{}}
  * @param {*} result 
  */
-function returnAsyncData(result, callback_ok, callback_error) {
+function returnAsyncData(result,callback_ok,callback_error) {
         if (result.flag) {
-                if (callback_ok) {
-                        callback_ok(result.data, result.msg, result);
+                if(callback_ok){
+                        callback_ok(result.data,result.msg,result);
                 }
         } else {
-                if (callback_error) {
-                        callback_error(result.data, result.msg, result);
-                }
+                if(callback_error){
+                        callback_error(result.data,result.msg,result);
+                }       
         }
 }
