@@ -3,25 +3,23 @@
  */
 var loserStarSweetAlertUtils = {};
 
-loserStarSweetAlertUtils.alertWarning = function(title,content){
-	loserStarSweetAlertUtils.alert(title,content,"warning");
+loserStarSweetAlertUtils.alertWarning = function (title, content, callback) {
+	loserStarSweetAlertUtils.alert(title, content, "warning", callback);
 }
 
-loserStarSweetAlertUtils.alertError = function(title,content){
-	loserStarSweetAlertUtils.alert(title,content,"error");
+loserStarSweetAlertUtils.alertError = function (title, content, callback) {
+	loserStarSweetAlertUtils.alert(title, content, "error", callback);
 }
 
-loserStarSweetAlertUtils.alertSuccess = function(title,content){
-	loserStarSweetAlertUtils.alert(title,content,"success");
+loserStarSweetAlertUtils.alertSuccess = function (title, content, callback) {
+	loserStarSweetAlertUtils.alert(title, content, "success", callback);
 }
 
-loserStarSweetAlertUtils.alertInfo = function(title,content){
-	loserStarSweetAlertUtils.alert(title,content,"info");
+loserStarSweetAlertUtils.alertInfo = function (title, content, callback) {
+	loserStarSweetAlertUtils.alert(title, content, "info", callback);
 }
 
-loserStarSweetAlertUtils.alert = function(title,content,type){
-	if(!title){title="";}
-	if(!content){content="";}
+loserStarSweetAlertUtils.alert = function (title, content, type, callback) {
 	if (!title) { title = ""; }
 	if (!content) { content = ""; }
 	swal({
@@ -29,6 +27,8 @@ loserStarSweetAlertUtils.alert = function(title,content,type){
 		icon: type,
 		text: content,
 		closeOnClickOutside: false,
+	}).then(function (value) {
+		if (callback) { callback(value); }
 	});
 }
 
