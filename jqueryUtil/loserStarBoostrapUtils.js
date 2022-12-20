@@ -38,6 +38,23 @@ loserStarBoostrapUtils.loading = function (title,content) {
     });
 }
 
+/**
+ * 关闭加载对话框
+ */
 loserStarBoostrapUtils.closeLoading = function(){
 	$('#loserStarBoostrapUtils_loadingDlg').modal("hide");
+}
+
+
+/**
+ * 给loading对话框设置事件回调方法（具体参考bootstrap3官网modal.js组件的事件）
+ * @param {*} eventType 事件名称（参考https://getbootstrap.com/docs/3.4/javascript/#modals）
+ * @param {*} callBack 回调方法
+ */
+loserStarBoostrapUtils.setLoadingCallback = function(eventType,callBack){
+    $('#loserStarBoostrapUtils_loadingDlg').on(eventType,function(e){
+        if(callBack){
+            callBack(e);
+        }
+    });
 }
