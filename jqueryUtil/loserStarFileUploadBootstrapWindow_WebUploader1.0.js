@@ -102,6 +102,7 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 		//打开完之后才能去初始化百度的上传组件，否则会有问题
 		$("#" + self.flagId + "_FileWindow").on("shown.bs.modal",function(e){
 			if (!self.uploader){
+				console.log("---------------初始化loserStarFileUploadBootstrapWindow_WebUploader---------------------");
 				// 初始化Web Uploader
 				self.uploader = WebUploader.create({
 					// 选完文件后，是否自动上传。
