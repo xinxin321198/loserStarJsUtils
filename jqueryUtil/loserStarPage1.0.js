@@ -158,7 +158,7 @@ loserStarPage.gotoCusPage = function () {
     var tmp = this;
     var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val());
     $("#" + tmp.pageId +"_pageNumber").val(pageNumber);
-    if (tmp.gotoCusPageCallback) { tmp.gotoCusPageCallback; }
+    if (tmp.gotoCusPageCallback) { tmp.gotoCusPageCallback(); }
 }
 
 /**
