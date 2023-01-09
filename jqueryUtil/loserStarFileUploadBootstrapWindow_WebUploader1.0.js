@@ -70,12 +70,12 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 		text += "                    <div class=\"modal-body\">";
 		text += "                        <div id=\"" + self.flagId +"_Picker\">选择文件</div>";
 		text += "                        ";
-		text += "                    </div>";
-		text += "";
 		text += "                    <h3>待上传文件队列</h3>";
-		text += "                    <ul id=\"" + self.flagId +"_FileListUl\" class=\"list-group\">";
+		text += "                    <ul id=\"" + self.flagId +"_FileListUl\" class=\"list-group\" style=\"height: 500px; overflow: auto;\">";
 		text += "                        ";
 		text += "                    </ul>";
+		text += "                    </div>";
+		text += "";
 		text += "                    <div class=\"modal-footer\">";
 		text += "                        <button id=\"" + self.flagId +"_UploadAllBtn\" type=\"button\" class=\"btn btn-primary\">全部上传</button>";
 		text += "                        <button id=\"" + self.flagId +"_CloseBtn\" type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭</button>";
