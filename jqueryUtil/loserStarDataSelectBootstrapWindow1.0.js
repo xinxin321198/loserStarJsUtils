@@ -24,12 +24,12 @@
         displayTableFiled: [{ name: "数据编号", id: "num" }, { name: "数据名称", id: "name" }, ],
         //配置数据的主键字段
         querSelectDataPrimaryKey:"data_id",
-        //点击单条数据的添加按钮时候的回调方法（该方法会把数据的主键传递进去）
+        //点击单条数据的添加按钮时候的回调方法（该方法第一个参数会把数据的主键传递进去，第二个参数是直接传递整条数据，第三个参数是open时候外部传递进来的参数）
         clickRowAddCallback:selectedMainDataRow
     }
     addMainDataWindow = new loserStarDataSelectBootstrapWindow(fileOpt);
-    addMainDataWindow.open();//打开窗口
-    addMainDataWindow.renfreshTableData([]);//刷新数据
+    addMainDataWindow.open({});//打开窗口,可以额外附个数据，选中一条数据后会把该数据以第三个参数的方式带到回调方法上）
+    addMainDataWindow.renfreshTableData([]);//刷新数据(数据得自己取数并以数组的形式传入该方法进行刷新)
 */
 /**
  * 构造方法
@@ -67,32 +67,33 @@ loserStarDataSelectBootstrapWindow.prototype = {
         text += "                        </button>";
         for (var i = 0; i < self.queryFiledList.length; i++) {
             var filedTmp = self.queryFiledList[i];
-            if ("text" == filedTmp.type){
+            if ("text" == filedTmp.type) {
                 text += "                        <div class=\"form-group\">";
-                text += "                            <label for=\"" + filedTmp.filedId +"\">" + filedTmp.filedName +"</label>";
-                text += "                            <input type=\"text\" class=\"form-control\" id=\"" + filedTmp.filedId + "\" placeholder=\"\" value=\"" + (filedTmp.value ? filedTmp.value:"") +"\">";
+                text += "                            <label for=\"" + filedTmp.filedId + "\">" + filedTmp.filedName + "</label>";
+                text += "                            <input type=\"text\" class=\"form-control\" id=\"" + filedTmp.filedId + "\" placeholder=\"\" value=\"" + (filedTmp.value ? filedTmp.value : "") + "\">";
                 text += "                        </div>";
             }
-            if ("select" == filedTmp.type){
+            if ("select" == filedTmp.type) {
                 text += "                        <div class=\"form-group\">";
-                text += "                            <label for=\"" + filedTmp.filedId +"\">" + filedTmp.filedName +"</label>";
-                text += "                            <select name=\"type\" id=\"" + filedTmp.filedId +"\" class=\"form-control\">";
+                text += "                            <label for=\"" + filedTmp.filedId + "\">" + filedTmp.filedName + "</label>";
+                text += "                            <select name=\"type\" id=\"" + filedTmp.filedId + "\" class=\"form-control\">";
                 var filedTmpValue = filedTmp.value;
-                for (var j = 0; j < filedTmpValue.length;j++){
+                for (var j = 0; j < filedTmpValue.length; j++) {
                     var valueList = filedTmpValue[j];
-                    text += "                                <option value=\"" + valueList.value +"\">" + valueList.name +"</option>";
+                    text += "                                <option value=\"" + valueList.value + "\">" + valueList.name + "</option>";
                 }
                 text += "                            </select>";
                 text += "                        </div>";
             }
         }
 
-        text += "                        <button id=\"" + self.flagId +"_queryBtn\" type=\"button\" class=\"btn btn-success\">搜索</button>";
+        text += "                        <button id=\"" + self.flagId + "_queryBtn\" type=\"button\" class=\"btn btn-success\">搜索</button>";
         text += "                    </div>";
         text += "                    <div class=\"modal-body\"  style=\"height: 500px; overflow: auto;\">";
-        text += "                        <table id=\"" + self.flagId +"_dataTable\" class=\"table table-bordered table-condensed\">";
+        text += "                        <table id=\"" + self.flagId + "_dataTable\" class=\"table table-bordered table-condensed\">";
         text += "                            <thead>";
         text += "                                <tr>";
+        text += "                                    <th>序号</th>";
         for (j = 0; j < self.displayTableFiled.length; j++) {
             var jTmp = self.displayTableFiled[j];
             text += "                                    <th>" + jTmp.name + "</th>";
@@ -100,13 +101,13 @@ loserStarDataSelectBootstrapWindow.prototype = {
         text += "                                    <th>操作</th>";
         text += "                                </tr>";
         text += "                            </thead>";
-        text += "                            <tbody id=\"" + self.flagId +"_dataList_tbody\">";
+        text += "                            <tbody id=\"" + self.flagId + "_dataList_tbody\">";
 
         text += "                            </tbody>";
         text += "                        </table>";
         text += "                    </div>";
         text += "                    <div class=\"modal-footer\">";
-        text += "                        <button id=\"" + self.flagId +"_CloseBtn\" type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭</button>";
+        text += "                        <button id=\"" + self.flagId + "_CloseBtn\" type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭</button>";
         text += "                    </div>";
         text += "                </div>";
         text += "                <!-- /.modal-content -->";
@@ -119,13 +120,14 @@ loserStarDataSelectBootstrapWindow.prototype = {
         $("body").append(text);
 
         //绑定按钮的事件
-        $("#" + self.flagId +"_queryBtn").on("click", function () {
+        $("#" + self.flagId + "_queryBtn").on("click", function () {
             self.clickQueryCallback();
         });
     },
-    //打开窗口
-    open: function () {
+    //打开窗口（可以额外附件个数据，选中一条数据后会把该数据以第二个参数的方式带到回调方法上）
+    open: function (otherData) {
         var self = this;
+        self.otherData = otherData;
         $("#" + self.flagId + "_dataSelectWindow").modal({
             keyboard: false,
             backdrop: 'static'
@@ -137,28 +139,29 @@ loserStarDataSelectBootstrapWindow.prototype = {
         });
     },
     //获取查询条件
-    getQueryParam:function(){
+    getQueryParam: function () {
         var self = this;
-        var queryParam ={};
-        for (var i = 0; i < self.queryFiledList.length;i++){
+        var queryParam = {};
+        for (var i = 0; i < self.queryFiledList.length; i++) {
             var tmp = self.queryFiledList[i];
-            queryParam[tmp.filedId] = $("#" + tmp.filedId +"").val();
+            queryParam[tmp.filedId] = $("#" + tmp.filedId + "").val();
         }
         return queryParam;
     },
     //刷新table列表数据
-    renfreshTableData:function(list){
+    renfreshTableData: function (list) {
         var self = this;
         var text = "";
-        for(var i=0;i<list.length;i++){
+        for (var i = 0; i < list.length; i++) {
             var tmp = list[i];
             text += "                                <tr>";
-            for (j = 0; j < self.displayTableFiled.length;j++){
+            text += "                                    <td>" + (i + 1) + "</td>";
+            for (j = 0; j < self.displayTableFiled.length; j++) {
                 var jTmp = self.displayTableFiled[j];
-                text += "                                    <td>" + tmp[jTmp.id] +"</td>";
+                text += "                                    <td>" + tmp[jTmp.id] + "</td>";
             }
             text += "                                    <td>";
-            text += "                                        <button id=\"" + tmp[self.querSelectDataPrimaryKey] + "_addBtn\" data-id=\"" + tmp.data_id +"\" type=\"button\" class=\"btn btn-primary\" onclick=\"\">添加</button>";
+            text += "                                        <button id=\"" + tmp[self.querSelectDataPrimaryKey] + "_addBtn\" data-id=\"" + tmp[self.querSelectDataPrimaryKey] + "\" type=\"button\" class=\"btn btn-primary\" onclick=\"\">添加</button>";
             text += "                                    </td>";
             text += "                                </tr>";
         }
@@ -166,13 +169,14 @@ loserStarDataSelectBootstrapWindow.prototype = {
         $("#" + self.flagId + "_dataList_tbody").html(text);
 
         for (var i = 0; i < list.length; i++) {
-            $("#" + list[i].data_id + "_addBtn").on("click", function (){
-                var btn = $(this);
-                var data_id = btn.attr("data-id");
-                if (self.clickRowAddCallback){
-                    self.clickRowAddCallback(data_id);
+            $("#" + list[i][self.querSelectDataPrimaryKey] + "_addBtn").on("click", function () {
+                var btnSelf = this;
+                var data_id = $(btnSelf).attr("data-id");
+                if (self.clickRowAddCallback) {
+                    self.clickRowAddCallback(data_id, $(btnSelf).data("data"), self.otherData);
                 }
-            })
+            });
+            $("#" + list[i][self.querSelectDataPrimaryKey] + "_addBtn").data("data", list[i]);
         }
     }
 }
