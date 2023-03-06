@@ -618,6 +618,89 @@ loserStarJsUtils.GetQueryString = function (name) {
   return null;
 }
 
+
+/**
+ * 解析url（来源： 司徒正美 https://www.cnblogs.com/rubylouvre/archive/2010/06/09/1755051.html）
+ * @param {*} url 
+ * @returns 
+ */
+loserStarJsUtils.parseURL = function (url) {
+  var a = document.createElement('a');
+  a.href = url;
+  return {
+    source: url,
+    protocol: a.protocol.replace(':', ''),
+    host: a.hostname,
+    port: a.port,
+    query: a.search,
+    params: (function () {
+      var ret = {},
+        seg = a.search.replace(/^\?/, '').split('&'),
+        len = seg.length, i = 0, s;
+      for (; i < len; i++) {
+        if (!seg[i]) { continue; }
+        s = seg[i].split('=');
+        ret[s[0]] = s[1];
+      }
+      return ret;
+
+    })(),
+    file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
+    hash: a.hash.replace('#', ''),
+    path: a.pathname.replace(/^([^\/])/, '/$1'),
+    relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
+    segments: a.pathname.replace(/^\//, '').split('/')
+  };
+}
+
+
+/**
+ * 替换url中同名的参数值，没有的话就添加上
+ * @param {*} myUrl 并非url字符串，需要调用司徒正美的loserStarJsUtils.parseURL(url)方法生成的对象
+ * @param {*} newParams  { id: 101, m: "World", page: 1,"page":2 }
+ * @returns 
+ */
+loserStarJsUtils.replaceUrlParams = function (myUrl, newParams) {
+  /*
+  for (var x in myUrl.params) {
+      for (var y in newParams) {
+          if (x.toLowerCase() == y.toLowerCase()) {
+              myUrl.params[x] = newParams[y];
+          }
+      }
+  }
+  */
+
+  for (var x in newParams) {
+    var hasInMyUrlParams = false;
+    for (var y in myUrl.params) {
+      if (x.toLowerCase() == y.toLowerCase()) {
+        myUrl.params[y] = newParams[x];
+        hasInMyUrlParams = true;
+        break;
+      }
+    }
+    //原来没有的参数则追加
+    if (!hasInMyUrlParams) {
+      myUrl.params[x] = newParams[x];
+    }
+  }
+  var _result = myUrl.protocol + "://" + myUrl.host + ":" + myUrl.port + myUrl.path + "?";
+
+  for (var p in myUrl.params) {
+    _result += (p + "=" + myUrl.params[p] + "&");
+  }
+
+  if (_result.substr(_result.length - 1) == "&") {
+    _result = _result.substr(0, _result.length - 1);
+  }
+
+  if (myUrl.hash != "") {
+    _result += "#" + myUrl.hash;
+  }
+  return _result;
+}
+
 /**
  * 获取选中的checkbox的值,基于jquery选择器,传入元素的name
  */
@@ -814,4 +897,11 @@ loserStarJsUtils.emty = function (obj) {
   } else {
     return obj;
   }
+}
+
+/**
+ * 返回上一页并刷新
+ */
+loserStarJsUtils.backPage = function () {
+  window.location.replace(document.referrer);
 }

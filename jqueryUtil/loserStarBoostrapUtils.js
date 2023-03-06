@@ -8,14 +8,14 @@ var loserStarBoostrapUtils = {};
  * @param {*} title 标题
  * @param {*} content 内容
  */
-loserStarBoostrapUtils.loading = function (title,content) {
-    if (undefined==title||null==title||""==title){
+loserStarBoostrapUtils.loading = function (title, content) {
+    if (undefined == title || null == title || "" == title) {
         title = "提示";//默认提示语
     }
-    if (undefined == content || null == content || "" == content){
+    if (undefined == content || null == content || "" == content) {
         title = "处理中，请勿关闭页面...";//默认提示语
     }
-    if($("#loserStarBoostrapUtils_loadingDlg")[0] == undefined || $("#loserStarBoostrapUtils_loadingDlg")[0]==null){
+    if ($("#loserStarBoostrapUtils_loadingDlg")[0] == undefined || $("#loserStarBoostrapUtils_loadingDlg")[0] == null) {
         //如果元素不存在就创建
         var text = "";
         text += "<div class=\"modal fade\" id=\"loserStarBoostrapUtils_loadingDlg\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\">";
@@ -41,8 +41,8 @@ loserStarBoostrapUtils.loading = function (title,content) {
 /**
  * 关闭加载对话框
  */
-loserStarBoostrapUtils.closeLoading = function(){
-	$('#loserStarBoostrapUtils_loadingDlg').modal("hide");
+loserStarBoostrapUtils.closeLoading = function () {
+    $('#loserStarBoostrapUtils_loadingDlg').modal("hide");
 }
 
 
@@ -51,10 +51,35 @@ loserStarBoostrapUtils.closeLoading = function(){
  * @param {*} eventType 事件名称（参考https://getbootstrap.com/docs/3.4/javascript/#modals）
  * @param {*} callBack 回调方法
  */
-loserStarBoostrapUtils.setLoadingCallback = function(eventType,callBack){
-    $('#loserStarBoostrapUtils_loadingDlg').on(eventType,function(e){
-        if(callBack){
+loserStarBoostrapUtils.setLoadingCallback = function (eventType, callBack) {
+    $('#loserStarBoostrapUtils_loadingDlg').on(eventType, function (e) {
+        if (callBack) {
             callBack(e);
         }
     });
+}
+
+/**
+ * 获取一个进度条html
+ * @param {*} scale 小数，最大1
+ */
+loserStarBoostrapUtils.getProgressHtml = function (scale) {
+    var votingProportionHtml = "";
+    var votingProportion = scale * 100;
+    var votingProportionClass = "";
+    if (votingProportion >= 75) {
+        votingProportionClass = "progress-bar-success";
+    } else if (votingProportion >= 50) {
+        votingProportionClass = "progress-bar-info";
+    } else if (votingProportion >= 25) {
+        votingProportionClass = "progress-bar-warning";
+    } else {
+        votingProportionClass = "progress-bar-danger";
+    }
+    votingProportionHtml += "<div class=\"progress \">";
+    votingProportionHtml += "  <div class=\"progress-bar " + votingProportionClass + " progress-bar-striped active\" role=\"progressbar \" aria-valuenow=\"" + votingProportion + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"min-width:2em;width: " + votingProportion + "%;\">";
+    votingProportionHtml += "    " + votingProportion + "%";
+    votingProportionHtml += "  </div>";
+    votingProportionHtml += "</div>";
+    return votingProportionHtml;
 }

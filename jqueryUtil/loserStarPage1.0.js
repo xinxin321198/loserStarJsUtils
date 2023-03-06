@@ -35,7 +35,7 @@
         gotoNextPageCallback: listPageEvent.queryUserList,
     }
     //生成分页对象
-    userPage = loserStarPage.initPage(pageCfg);
+    userPage = new loserStarPage(pageCfg);
 
     //自定义的查询数据的方法
     var listPageEvent = {};
@@ -74,213 +74,189 @@
     });
 }
  */
-var loserStarPage = {}
-loserStarPage.initPage = function (cfg) {
-    if(!cfg){alert("分页组件初始化异常，没有定义cfg配置对象");}
-    var tmp = {};
-    if (!cfg.pageId) { alert("分页组件初始化异常，没有定义pageId"); }
-    tmp.pageId = cfg.pageId;//div的id
-    if (!cfg.gotoCusPageCallback) { alert("分页组件初始化异常，没有定义gotoCusPageCallback"); }
-    tmp.gotoCusPageCallback = cfg.gotoCusPageCallback;//跳转到某个分页之后（自定义pageNumber）的回调方法
-    if (!cfg.gotoPreviousPageCallback) { alert("分页组件初始化异常，没有定义gotoPreviousPageCallback"); }
-    tmp.gotoPreviousPageCallback = cfg.gotoPreviousPageCallback;//点击上一页回调方法（pageNumber--）
-    if (!cfg.gotoNextPageCallback) { alert("分页组件初始化异常，没有定义gotoPreviousPageCallback"); }
-    tmp.gotoNextPageCallback = cfg.gotoNextPageCallback;//点下一页回调方法（pageNumber++）
-
-    tmp.renderHtml = loserStarPage.renderHtml;//渲染分页组件的html
-
-    tmp.gotoCusPage = loserStarPage.gotoCusPage;//跳转到自定义页码（并调用初始化传入的gotoCusPageCallback回调）
-    tmp.gotoPreviousPage = loserStarPage.gotoPreviousPage;//跳转上一页（并调用初始化传入的gotoPreviousPageCallback回调）
-    tmp.gotoNextPage = loserStarPage.gotoNextPage;//跳转下一页（并调用初始化传入的gotoNextPageCallback回调）
-
-    tmp.setPageNumber = loserStarPage.setPageNumber;//设置页码
-    tmp.getPageNumber = loserStarPage.getPageNumber;//获取当前页码
-
-    tmp.setPageSize = loserStarPage.setPageSize;//设置每页多少条数据
-    tmp.getPageSize = loserStarPage.getPageSize;//获取每页多少条数据
-
-    tmp.setTotalPage = loserStarPage.setTotalPage;//设置总页码
-    tmp.getTotalPage = loserStarPage.getTotalPage;//获取总页码
-
-    tmp.setTotalRow = loserStarPage.setTotalRow;//设置数据总数
-    tmp.getTotalRow = loserStarPage.getTotalRow;//获取数据总数
-
-    tmp.hidePreBtn = loserStarPage.hidePreBtn;//隐藏上一页按钮
-    tmp.showPreBtn = loserStarPage.showPreBtn;//显示上一页按钮
-    tmp.hideNextBtn = loserStarPage.hideNextBtn;//隐藏下一页按钮
-    tmp.showNextBtn = loserStarPage.showNextBtn;//显示下一页按钮
-
-    tmp.renderHtml();//初始化时候就自动执行一次渲染html的方法，否则又得麻烦自己去手工调用一次
-    return tmp;
+var loserStarPage = function (cfg) {
+    this.initPage(cfg);
 }
 
-/**
- * 渲染分页组件的html,并给各个按钮绑定上方法
- */
-loserStarPage.renderHtml = function(){
-    var tmp = this;
-    var text = "";
-    text += "<nav aria-label=\"...\">";
-    text += "                        <ul class=\"pager\">";
-    text += "                            <li>数据共<label id=\"" + tmp.pageId + "_totalRow\"></label>条，每页<label id=\"" + tmp.pageId + "_pageSize\"></label>条，共<label id=\"" + tmp.pageId + "_totalPage\"></label>页，当前第<input type=\"number\" name=\"\" id=\"" + tmp.pageId +"_pageNumber\" class=\"form-control\" style=\"display:inline-block;width:auto;width: 5%;\">页</li>";
-    text += "                            <li id=\"" + tmp.pageId +"_cus_btn\"><a href=\"javascript:void(0);\">跳转</a></li>";
-    text += "                            <li id=\"" + tmp.pageId +"_previous_btn\"><a  href=\"javascript:void(0);\">上一页</a></li>";
-    text += "                            <li id=\"" + tmp.pageId +"_next_btn\"><a href=\"javascript:void(0);;\">下一页</a></li>";
-    text += "                        </ul>";
-    text += "                    </nav>";
-    $("#" + tmp.pageId).html(text);
+loserStarPage.prototype = {
+    constructor: loserStarPage,
+    initPage: function (cfg) {
+        if (!cfg) { alert("分页组件初始化异常，没有定义cfg配置对象"); }
+        var tmp = this;
+        if (!cfg.pageId) { alert("分页组件初始化异常，没有定义pageId"); }
+        tmp.pageId = cfg.pageId;//div的id
+        if (!cfg.gotoCusPageCallback) { alert("分页组件初始化异常，没有定义gotoCusPageCallback"); }
+        tmp.gotoCusPageCallback = cfg.gotoCusPageCallback;//跳转到某个分页之后（自定义pageNumber）的回调方法
+        if (!cfg.gotoPreviousPageCallback) { alert("分页组件初始化异常，没有定义gotoPreviousPageCallback"); }
+        tmp.gotoPreviousPageCallback = cfg.gotoPreviousPageCallback;//点击上一页回调方法（pageNumber--）
+        if (!cfg.gotoNextPageCallback) { alert("分页组件初始化异常，没有定义gotoPreviousPageCallback"); }
+        tmp.gotoNextPageCallback = cfg.gotoNextPageCallback;//点下一页回调方法（pageNumber++）
+        tmp.renderHtml();//初始化时候就自动执行一次渲染html的方法，否则又得麻烦自己去手工调用一次
+    },
+    /**
+     * 渲染分页组件的html,并给各个按钮绑定上方法
+     */
+    renderHtml: function () {
+        var tmp = this;
+        var text = "";
+        text += "<nav aria-label=\"...\">";
+        text += "                        <ul class=\"pager\">";
+        text += "                            <li>数据共<label id=\"" + tmp.pageId + "_totalRow\"></label>条，每页<label id=\"" + tmp.pageId + "_pageSize\"></label>条，共<label id=\"" + tmp.pageId + "_totalPage\"></label>页，当前第<input type=\"number\" name=\"\" id=\"" + tmp.pageId + "_pageNumber\" class=\"form-control\" style=\"display:inline-block;width:auto;width: 5%;\">页</li>";
+        text += "                            <li id=\"" + tmp.pageId + "_cus_btn\"><a href=\"javascript:void(0);\">跳转</a></li>";
+        text += "                            <li id=\"" + tmp.pageId + "_previous_btn\"><a  href=\"javascript:void(0);\">上一页</a></li>";
+        text += "                            <li id=\"" + tmp.pageId + "_next_btn\"><a href=\"javascript:void(0);;\">下一页</a></li>";
+        text += "                        </ul>";
+        text += "                    </nav>";
+        $("#" + tmp.pageId).html(text);
 
-    $("#" + tmp.pageId + "_cus_btn").unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
-    $("#" + tmp.pageId + "_cus_btn").on("click", function (e) {
-        if (tmp.gotoCusPage) {
-            tmp.gotoCusPage();
-        }
-    });
+        $("#" + tmp.pageId + "_cus_btn").unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
+        $("#" + tmp.pageId + "_cus_btn").on("click", function (e) {
+            if (tmp.gotoCusPage) {
+                tmp.gotoCusPage();
+            }
+        });
 
-    $("#" + tmp.pageId + "_previous_btn").unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
-    $("#" + tmp.pageId + "_previous_btn").on("click",function(e){
-        if (tmp.gotoPreviousPage){
-            tmp.gotoPreviousPage();
-        }
-    });
+        $("#" + tmp.pageId + "_previous_btn").unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
+        $("#" + tmp.pageId + "_previous_btn").on("click", function (e) {
+            if (tmp.gotoPreviousPage) {
+                tmp.gotoPreviousPage();
+            }
+        });
 
-    $("#" + tmp.pageId + "_next_btn").unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
-    $("#" + tmp.pageId + "_next_btn").on("click", function (e) {
-        if (tmp.gotoNextPage) {
-            tmp.gotoNextPage();
-        }
-    });
+        $("#" + tmp.pageId + "_next_btn").unbind("click");//添加事件前先移除事件，否则会造成添加多个事件，导致执行多次
+        $("#" + tmp.pageId + "_next_btn").on("click", function (e) {
+            if (tmp.gotoNextPage) {
+                tmp.gotoNextPage();
+            }
+        });
+    },
+    /**
+     * 跳转到自定义页码（并调用初始化传入的gotoCusPageCallback回调）
+     */
+    gotoCusPage: function () {
+        var tmp = this;
+        var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val());
+        $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
+        if (tmp.gotoCusPageCallback) { tmp.gotoCusPageCallback(); }
+    },
+    /**
+     * 跳转上一页（并调用初始化传入的gotoPreviousPageCallback回调）
+     */
+    gotoPreviousPage: function () {
+        var tmp = this;
+        var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val()) - 1;
+        $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
+        if (tmp.gotoPreviousPageCallback) { tmp.gotoPreviousPageCallback(); }
+    },
+    /**
+     * 跳转下一页（并调用初始化传入的gotoNextPageCallback回调）
+     */
+    gotoNextPage: function () {
+        var tmp = this;
+        var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val()) + 1;
+        $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
+        if (tmp.gotoNextPageCallback) { tmp.gotoNextPageCallback(); }
+    },
+    /**
+     * 获取当前页码
+     * @returns 
+     */
+    getPageNumber: function () {
+        var tmp = this;
+        return $("#" + tmp.pageId + "_pageNumber").val();
+    },
+    /**
+     * 设置当前页码
+     * @param {*} pageNumber 
+     */
+    setPageNumber: function (pageNumber) {
+        var tmp = this;
+        $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
+    },
+    /**
+     * 获取每页多少条
+     * @returns 
+     */
+    getPageSize: function () {
+        var tmp = this;
+        return $("#" + tmp.pageId + "_pageSize").text();
+    },
+    /**
+     * 设置每页多少条
+     * @param {*} pageSize 
+     */
+    setPageSize: function (pageSize) {
+        var tmp = this;
+        $("#" + tmp.pageId + "_pageSize").text(pageSize);
+    },
+    /**
+     * 设置总页数
+     * @param {*} totalPage 
+     */
+    setTotalPage: function (totalPage) {
+        var tmp = this;
+        $("#" + tmp.pageId + "_totalPage").text(totalPage);
+    },
+    /**
+     * 获取页面总数
+     * @returns 
+     */
+    getTotalPage: function () {
+        var tmp = this;
+        return $("#" + tmp.pageId + "_totalPage").text();
+    },
+    /**
+     * 设置数据总条数
+     * @param {*} totalRow 
+     */
+    setTotalRow: function (totalRow) {
+        var tmp = this;
+        $("#" + tmp.pageId + "_totalRow").text(totalRow);
+    },
+    /**
+     * 获取数据总条数
+     * @returns 
+     */
+    getTotalRow: function () {
+        var tmp = this;
+        return $("#" + tmp.pageId + "_totalRow").text();
+    },
+    /**
+     * 隐藏上一页按钮
+     */
+    hidePreBtn: function () {
+        var tmp = this;
+        $("#" + tmp.pageId + "_previous_btn").hide();
+    },
+    /**
+     * 显示上一页按钮
+     */
+    showPreBtn: function () {
+        var tmp = this;
+        $("#" + tmp.pageId + "_previous_btn").show();
+    },
+    /**
+     * 隐藏下一页按钮
+     */
+    hideNextBtn: function () {
+        var tmp = this;
+        $("#" + tmp.pageId + "_next_btn").hide();
+    },
+    /**
+     * 显示下一页按钮
+     */
+    showNextBtn: function () {
+        var tmp = this;
+        $("#" + tmp.pageId + "_next_btn").show();
+    }
 }
-/**
- * 跳转到自定义页码（并调用初始化传入的gotoCusPageCallback回调）
- */
-loserStarPage.gotoCusPage = function () {
-    var tmp = this;
-    var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val());
-    $("#" + tmp.pageId +"_pageNumber").val(pageNumber);
-    if (tmp.gotoCusPageCallback) { tmp.gotoCusPageCallback(); }
-}
 
-/**
- * 跳转上一页（并调用初始化传入的gotoPreviousPageCallback回调）
- */
-loserStarPage.gotoPreviousPage = function () {
-    var tmp = this;
-    var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val()) - 1;
-    $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
-    if (tmp.gotoPreviousPageCallback) { tmp.gotoPreviousPageCallback(); }
-}
 
-/**
- * 跳转下一页（并调用初始化传入的gotoNextPageCallback回调）
- */
-loserStarPage.gotoNextPage = function () {
-    var tmp = this;
-    var pageNumber = parseInt($("#" + tmp.pageId + "_pageNumber").val()) + 1;
-    $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
-    if (tmp.gotoNextPageCallback) { tmp.gotoNextPageCallback(); }
-}
 
-/**
- * 获取当前页码
- * @returns 
- */
-loserStarPage.getPageNumber = function(){
-    var tmp = this;
-    return $("#" + tmp.pageId + "_pageNumber").val();
-}
 
-/**
- * 设置当前页码
- * @param {*} pageNumber 
- */
-loserStarPage.setPageNumber = function (pageNumber) {
-    var tmp = this;
-    $("#" + tmp.pageId + "_pageNumber").val(pageNumber);
-}
 
-/**
- * 获取每页多少条
- * @returns 
- */
-loserStarPage.getPageSize = function () {
-    var tmp = this;
-    return $("#" + tmp.pageId + "_pageSize").text();
-}
 
-/**
- * 设置每页多少条
- * @param {*} pageSize 
- */
-loserStarPage.setPageSize = function (pageSize) {
-    var tmp = this;
-    $("#" + tmp.pageId + "_pageSize").text(pageSize);
-}
 
-/**
- * 设置总页数
- * @param {*} totalPage 
- */
-loserStarPage.setTotalPage = function (totalPage) {
-    var tmp = this;
-    $("#" + tmp.pageId + "_totalPage").text(totalPage);
-}
 
-/**
- * 获取页面总数
- * @returns 
- */
-loserStarPage.getTotalPage = function () {
-    var tmp = this;
-    return $("#" + tmp.pageId + "_totalPage").text();
-}
 
-/**
- * 设置数据总条数
- * @param {*} totalRow 
- */
-loserStarPage.setTotalRow = function (totalRow) {
-    var tmp = this;
-    $("#" + tmp.pageId + "_totalRow").text(totalRow);
-}
 
-/**
- * 获取数据总条数
- * @returns 
- */
-loserStarPage.getTotalRow = function () {
-    var tmp = this;
-    return $("#" + tmp.pageId + "_totalRow").text();
-}
-
-/**
- * 隐藏上一页按钮
- */
-loserStarPage.hidePreBtn = function(){
-    var tmp = this;
-    $("#" + tmp.pageId + "_previous_btn").hide();
-}
-
-/**
- * 显示上一页按钮
- */
-loserStarPage.showPreBtn = function(){
-    var tmp = this;
-    $("#" + tmp.pageId + "_previous_btn").show();
-}
-
-/**
- * 隐藏下一页按钮
- */
-loserStarPage.hideNextBtn = function(){
-    var tmp = this;
-    $("#" + tmp.pageId + "_next_btn").hide();
-}
-
-/**
- * 显示下一页按钮
- */
-loserStarPage.showNextBtn = function(){
-    var tmp = this;
-    $("#" + tmp.pageId + "_next_btn").show();
-}

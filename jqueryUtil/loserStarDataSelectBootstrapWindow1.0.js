@@ -110,7 +110,7 @@ loserStarDataSelectBootstrapWindow.prototype = {
         text += "                        <table id=\"" + self.flagId + "_dataTable\" class=\"table table-bordered table-condensed\">";
         text += "                            <thead>";
         text += "                                <tr>";
-        text += "                                    <th>序号</th>";
+        text += "                                    <th>#</th>";
         for (j = 0; j < self.displayTableFiled.length; j++) {
             var jTmp = self.displayTableFiled[j];
             text += "                                    <th>" + jTmp.name + "</th>";
@@ -124,7 +124,7 @@ loserStarDataSelectBootstrapWindow.prototype = {
         text += "                        </table>";
         text += "                    </div>";
         text += "                    <div class=\"modal-footer\">";
-        text += "                        <button id=\"" + self.flagId + "_CloseBtn\" type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭</button>";
+        text += "                        <button id=\"" + self.flagId + "_CloseBtn\" type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">关闭</button>";
         text += "                    </div>";
         text += "                </div>";
         text += "                <!-- /.modal-content -->";
@@ -176,9 +176,10 @@ loserStarDataSelectBootstrapWindow.prototype = {
         var self = this;
         self.list = list ? list : [];
         self.disabledIdList = disabledIdList ? disabledIdList : [];
+        $("#" + self.flagId + "_dataList_tbody").html("");
         var text = "";
-        for (var i = 0; i < list.length; i++) {
-            var tmp = list[i];
+        for (var i = 0; i < self.list.length; i++) {
+            var tmp = self.list[i];
             text += "                                <tr>";
             text += "                                    <td>" + (i + 1) + "</td>";
             for (j = 0; j < self.displayTableFiled.length; j++) {
@@ -194,11 +195,10 @@ loserStarDataSelectBootstrapWindow.prototype = {
             text += "                                    </td>";
             text += "                                </tr>";
         }
-        $("#" + self.flagId + "_dataList_tbody").html("");
         $("#" + self.flagId + "_dataList_tbody").html(text);
 
-        for (var i = 0; i < list.length; i++) {
-            var tmp = list[i];
+        for (var i = 0; i < self.list.length; i++) {
+            var tmp = self.list[i];
             //绑定按钮的click事件
             for (var j = 0; j < self.operationBtnOpt.length; j++) {
                 var btnOptTmp = self.operationBtnOpt[j];
