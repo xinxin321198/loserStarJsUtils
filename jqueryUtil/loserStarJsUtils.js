@@ -904,4 +904,5 @@ loserStarJsUtils.emty = function (obj) {
  */
 loserStarJsUtils.backPage = function () {
   window.location.replace(document.referrer);
+  // history.go(-1); location.reload();
 }
