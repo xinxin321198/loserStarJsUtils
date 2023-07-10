@@ -42,7 +42,7 @@
     addMainDataWindow = new loserStarDataSelectBootstrapWindow(fileOpt);
     addMainDataWindow.open({});//打开窗口,可以额外附个数据，选中一条数据后会把该数据以第三个参数的方式带到回调方法上）
     addMainDataWindow.renfreshTableData([],[]);//刷新数据(数据得自己取数并以数组的形式传入该方法进行刷新)第一个参数：需要刷新的数据；第二个参数：刷新之后需要禁用选择的数据主键id集合
-    addMainDataWindow.close(function{alert('窗口已关闭，这是关闭后的回调');})//代码关闭窗口，关闭结束后会触发对话框的关闭事件，可从外部传入一个回调方法进行些相关操作
+    addMainDataWindow.closeWindow(function{alert('窗口已关闭，这是关闭后的回调');})//代码关闭窗口，关闭结束后会触发对话框的关闭事件，可从外部传入一个回调方法进行些相关操作
 */
 /**
  * 构造方法
