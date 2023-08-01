@@ -6,8 +6,8 @@
 	  var fileOpt = {
 		//自定义标识id（所有生成的元素的id都会以此开头，以防html节点互相污染）
 		flagId:"loserStar",
-		//最大允许上传的大小（单位bit）
-		maxSize:200000000,
+		//最大允许上传的大小（单位byte，默认200MB=209715200byte,1G=1024MB,1MB=1024kb,1kb=1024byte）
+		maxSize:209715200,
 		//一般该参数不会在初始化时候就填，因为可能要打开窗口时候才决定得了传到哪个url上，所以可以使用setUrl(url)方法替代
 		url:"uploadFile.do",
 		//附件类型集合（如果该参数有值，则该组件则可拥有一个附件类型选择的下拉框，并且上传的url会自动添加上file_type参数）
@@ -33,7 +33,7 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 	constructor: loserStarFileUploadBootstrapWindow_WebUploader,
 	init: function (opt) {
 		this.flagId = opt.flagId;//自定义标识id（所有生成的元素的id都会以此开头，以防html节点互相污染）
-		this.maxSize = opt.maxSize;//最大允许上传的大小（单位bit）
+		this.maxSize = opt.maxSize ? opt.maxSize : 209715200;//最大允许上传的大小（单位bit）
 		this.fileTypeList = opt.fileTypeList;//附件类型
 		this.url = opt.url;//默认上传的url
 		this.uploadFinishedCallback = opt.uploadFinishedCallback;
@@ -71,7 +71,7 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 		text += "                        <div id=\"" + self.flagId + "_Picker\">选择文件</div>";
 		text += "                        ";
 		text += "                    <h3>待上传文件队列</h3>";
-		text += "                    <ul id=\"" + self.flagId + "_FileListUl\" class=\"list-group\" style=\"height: 500px; overflow: auto;\">";
+		text += "                    <ul id=\"" + self.flagId + "_FileListUl\" class=\"list-group\" style=\"overflow: auto;\">";
 		text += "                        ";
 		text += "                    </ul>";
 		text += "                    </div>";
@@ -116,9 +116,11 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 				});
 				// 当有文件添加进来的时候
 				self.uploader.on('fileQueued', function (file) {
-					if (!self.maxSize) {
+					if (self.maxSize) {
 						if (file.size > self.maxSize) {
-							loserStarSweetAlertUtils.alertWarning("上传文件不能大于" + (self.maxSize / 1000000).toFixed(2) + "MB，您选择的文件有" + (file.size / 1000000).toFixed(2) + "MB");
+							var mb = (file.size / 1024 /1024).toFixed(2);
+							var maxMb = (self.maxSize / 1024 / 1024).toFixed(2);
+							loserStarSweetAlertUtils.alertError("上传文件不能大于" + maxMb + "MB，您选择的文件有" + mb + "MB");
 							return;
 						}
 					}

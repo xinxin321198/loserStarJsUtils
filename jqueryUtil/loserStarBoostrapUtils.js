@@ -62,8 +62,9 @@ loserStarBoostrapUtils.setLoadingCallback = function (eventType, callBack) {
 /**
  * 获取一个进度条html
  * @param {*} scale 小数，最大1
+ * @param {*} pointCount 小数点位数（默认值是2，即保留小数点后2位）
  */
-loserStarBoostrapUtils.getProgressHtml = function (scale) {
+loserStarBoostrapUtils.getProgressHtml = function (scale,pointCount) {
     var votingProportionHtml = "";
     var votingProportion = scale * 100;
     var votingProportionClass = "";
@@ -76,10 +77,60 @@ loserStarBoostrapUtils.getProgressHtml = function (scale) {
     } else {
         votingProportionClass = "progress-bar-danger";
     }
+
+    if (pointCount){
+        votingProportion = votingProportion.toFixed(pointCount);
+    }else{
+        votingProportion = votingProportion.toFixed(2);
+    }
+
     votingProportionHtml += "<div class=\"progress \">";
     votingProportionHtml += "  <div class=\"progress-bar " + votingProportionClass + " progress-bar-striped active\" role=\"progressbar \" aria-valuenow=\"" + votingProportion + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"min-width:2em;width: " + votingProportion + "%;\">";
     votingProportionHtml += "    " + votingProportion + "%";
     votingProportionHtml += "  </div>";
     votingProportionHtml += "</div>";
     return votingProportionHtml;
+}
+
+
+/**
+ * 生成下拉列表的html
+ * @param {*} objList array 可选的值数组合集，通过keyFieldName和valueFieldname指定使用数组中的那些字段
+ * @param {*} isEmpty bool 是否添加一个空元素
+ * @param {*} keyFieldName stirng 用作从objList中取值时的字段名，用作option的value
+ * @param {*} valueFieldname stirng 用作从objList中取值时的字段名，用作option的选项名称
+ * @returns 
+ */
+loserStarBoostrapUtils.getSelectHtml = function (objList, isEmpty,valueFieldName,keyFieldName){
+    var text = "";
+    if (isEmpty!=undefined&&isEmpty!=null&& (typeof isEmpty)=="boolean" && isEmpty){
+        text += "<option value=\"\"></option>";
+    }
+    for (var i = 0; i < objList.length; i++) {
+        var tmp = objList[i];
+        text += "<option value=\"" + tmp[valueFieldName] + "\">" + tmp[keyFieldName] + "</option>";
+    }
+    return text;
+}
+
+/**
+ * 生成radio组的html
+ * @param {*} objList array 可选的值数组合集，通过keyFieldName和valueFieldname指定使用数组中的那些字段
+ * @param {*} groupId 分组的id，也就相当于name，同一组的不能重复选择
+ * @param {*} keyFieldName stirng 用作从objList中取值时的字段名，用作radio的名称
+ * @param {*} valueFieldname stirng 用作从objList中取值时的字段名，用作radio的value
+ * @returns 
+ */
+loserStarBoostrapUtils.getRadioHtml = function (objList, groupId, valueFieldName, keyFieldName) {
+    var text = "";
+    for (var i = 0; i < objList.length; i++) {
+        var tmp = objList[i];
+        text += "<div class=\"radio\">";
+        text += "                                                            <label>";
+        text += "                                                                <input type=\"radio\" name=\"" + groupId + "\"  value=\"" + tmp[valueFieldName] + "\">";
+        text += "                                                                " + tmp[keyFieldName];
+        text += "                                                            </label>";
+        text += "                                                        </div>";
+    }
+    return text;
 }
