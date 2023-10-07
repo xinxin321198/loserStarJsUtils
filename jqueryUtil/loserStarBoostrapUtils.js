@@ -1,6 +1,9 @@
-
 /**
- * 这是基于bootstrap3封装的一些方法
+ * version:20230922
+ * author：loserStar
+ * github:https://github.com/xinxin321198/loserStarJsUtils
+ * emial:362527240@qq.com
+ * 这是bootstrap3的一些相关方法，兼容部分adminLTE2.x的东西
  */
 var loserStarBoostrapUtils = {};
 /**
@@ -64,7 +67,7 @@ loserStarBoostrapUtils.setLoadingCallback = function (eventType, callBack) {
  * @param {*} scale 小数，最大1
  * @param {*} pointCount 小数点位数（默认值是2，即保留小数点后2位）
  */
-loserStarBoostrapUtils.getProgressHtml = function (scale,pointCount) {
+loserStarBoostrapUtils.getProgressHtml = function (scale, pointCount) {
     var votingProportionHtml = "";
     var votingProportion = scale * 100;
     var votingProportionClass = "";
@@ -78,9 +81,9 @@ loserStarBoostrapUtils.getProgressHtml = function (scale,pointCount) {
         votingProportionClass = "progress-bar-danger";
     }
 
-    if (pointCount){
+    if (pointCount) {
         votingProportion = votingProportion.toFixed(pointCount);
-    }else{
+    } else {
         votingProportion = votingProportion.toFixed(2);
     }
 
@@ -94,16 +97,16 @@ loserStarBoostrapUtils.getProgressHtml = function (scale,pointCount) {
 
 
 /**
- * 生成下拉列表的html
+ * 生成下拉列表的html（已知完美兼容select2）
  * @param {*} objList array 可选的值数组合集，通过keyFieldName和valueFieldname指定使用数组中的那些字段
  * @param {*} isEmpty bool 是否添加一个空元素
- * @param {*} keyFieldName stirng 用作从objList中取值时的字段名，用作option的value
  * @param {*} valueFieldname stirng 用作从objList中取值时的字段名，用作option的选项名称
+ * @param {*} keyFieldName stirng 用作从objList中取值时的字段名，用作option的value
  * @returns 
  */
-loserStarBoostrapUtils.getSelectHtml = function (objList, isEmpty,valueFieldName,keyFieldName){
+loserStarBoostrapUtils.getSelectHtml = function (objList, isEmpty, valueFieldName, keyFieldName) {
     var text = "";
-    if (isEmpty!=undefined&&isEmpty!=null&& (typeof isEmpty)=="boolean" && isEmpty){
+    if (isEmpty != undefined && isEmpty != null && (typeof isEmpty) == "boolean" && isEmpty) {
         text += "<option value=\"\"></option>";
     }
     for (var i = 0; i < objList.length; i++) {

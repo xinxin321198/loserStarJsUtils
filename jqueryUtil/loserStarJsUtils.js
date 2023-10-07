@@ -1,10 +1,11 @@
 /**
- * version:20200731
+ * version:20230922
  * author：loserStar
  * github:https://github.com/xinxin321198/loserStarJsUtils
  * emial:362527240@qq.com
  * 新增了浏览器的版本检测
  * 新增了获取浏览器窗口宽高的方法
+ * 20230922 selectedOption里最后触发一下change方法，以便兼容第三方插件，比如select2
  */
 var loserStarJsUtils = {};
 
@@ -376,6 +377,8 @@ loserStarJsUtils.selectedOption = function (selector, value) {
       break;
     }
   }
+  //最后触发一下change事件，以便兼容第三方插件，比如select2
+  $(selector).trigger("change");
 };
 
 /**
