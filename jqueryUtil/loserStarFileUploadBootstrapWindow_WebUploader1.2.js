@@ -1,4 +1,5 @@
 /**
+ * version :1.2
  * 基于bootstrap3的模态对话框和百度上传组件集成的上传附件组件(此组件不依赖于flash，可在最新chrome中禁止flash时使用)，使用原型链的方式封装
  * 
  * 基本用法，引入该js文件和依赖的loserStarSweetAlertUtils.js，以及相关的bootstrap3的js
@@ -21,6 +22,10 @@
 		title:'标题',
 		//允许上传的文件后缀，不配置该项则所有类型可上传
 		suffix:["jpg","png"],
+		//是否创建缩略图
+		isMakeThumb:true,
+		//选完文件是否自动上传
+		autoUpload:false,
 	}
 	2.传入配置对象，生成附件上传组件的对象
 	loserStarFileWindow = new loserStarFileUploadBootstrapWindow_WebUploader(fileOpt);
@@ -49,6 +54,8 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 		this.uploadFinishedCallback = opt.uploadFinishedCallback;//上传完成的回调
 		this.title = opt.title;//标题
 		this.suffix = opt.suffix ? opt.suffix : [];//可上传的后缀
+		this.isMakeThumb = opt.isMakeThumb ? opt.isMakeThumb : true;//是否创建缩略图,默认创建
+		this.autoUpload = opt.autoUpload ? opt.autoUpload : false;//选完图片是否自动上传
 		//执行一些初始化的方法
 		this.createElement();//初始化时候就执行一次渲染html
 	},
@@ -118,8 +125,9 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 				console.log("---------------初始化loserStarFileUploadBootstrapWindow_WebUploader---------------------");
 				// 初始化Web Uploader
 				self.uploader = WebUploader.create({
+					dnd: $("#" + self.flagId + "_FileWindow"),
 					// 选完文件后，是否自动上传。
-					auto: false,
+					auto: self.autoUpload,
 					// 选择文件的按钮。可选。
 					// 内部根据当前运行是创建，可能是input元素，也可能是flash.
 					pick: "#" + self.flagId + "_Picker",
@@ -170,6 +178,7 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 						text += "                            <span id=\"" + self.flagId + "_" + file.id + "_FileType\" class=\"label label-default\" value=\"" + selectedFileTypeValue + "\">" + selectedFileTypeName + "</span>";
 					}
 					text += "                            <span>" + file.name + "</span>";
+					text += "							 <img id=\"" + self.flagId + "_" + file.id + "Thumb\" />";
 					text += "                            <div id=\"" + self.flagId + "_" + file.id + "_FileListProgress\" class=\"progress\">";
 					text += "                                <div id=\"" + self.flagId + "_" + file.id + "_FileListProgressSub\" class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"45\"";
 					text += "                                    aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 0%\">";
@@ -178,6 +187,20 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 					text += "                            </div>";
 					text += "                        </li>";
 					$("#" + self.flagId + "_FileListUl").append(text);
+
+					if (self.isMakeThumb) {
+						// 创建缩略图
+						// 如果为非图片文件，可以不用调用此方法。
+						// thumbnailWidth x thumbnailHeight 为 100 x 100
+						self.uploader.makeThumb(file, function (error, src) {
+							if (error) {
+								$("#" + self.flagId + "_" + file.id + "Thumb").replaceWith('<span>不能预览</span>');
+								return;
+							}
+
+							$("#" + self.flagId + "_" + file.id + "Thumb").attr('src', src);
+						}, 100, 100);
+					}
 
 					//每个文件加入队列之后，绑定移除队列的按钮事件
 					$("#" + self.flagId + "_" + file.id + "_FileListRemBtn").on("click", function () {
@@ -236,9 +259,9 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 				//当某个文件上传到服务端响应后，会派送此事件来询问服务端响应是否有效。如果此事件handler返回值为false, 则此文件将派送server类型的uploadError事件。
 				self.uploader.on("uploadAccept", function (object, ret) {
 					console.log("当某个文件上传到服务端响应后，会派送此事件来询问服务端响应是否有效。");
-					if (self.uploadAcceptCallback){
+					if (self.uploadAcceptCallback) {
 						return self.uploadAcceptCallback(object, ret);
-					}else{
+					} else {
 						return true;
 					}
 				});
@@ -264,7 +287,7 @@ loserStarFileUploadBootstrapWindow_WebUploader.prototype = {
 					console.log('当文件上传成功时触发。');
 					$("#" + self.flagId + "_" + file.id + "_FileListProgressSub").addClass("progress-bar-success");//把进度条设为绿色
 					setTimeout(function () { $("#" + self.flagId + "_" + file.id + "_FileListLi").remove(); }, 2000);//延迟一段时间后移除该文件的li
-					if (self.uploadSuccessCallback){
+					if (self.uploadSuccessCallback) {
 						self.uploadSuccessCallback(file, response);
 					}
 
