@@ -16,7 +16,7 @@
 		//上传成功时候的回调,注意多文件上传时，每个文件上传成功都会触发一次（两个参数，file 文件信息, response 服务器响应信息）
 		uploadSuccessCallback:uploadSuccessCallback,
 		//上传时候校验的回调,可在此弹出一些相关的错误提示（此方法接收两个参数（object 文件一些相关信息, ret 服务端返回的数据），且必须有返回值，返回false则会触发uploadError事件,代表不能继续上传；返回true，则继续执行上传；不传入该方法，则默认返回true）
-		uploadFinishedCallback:uploadFinishedCallback,
+		uploadAcceptCallback:uploadAcceptCallback,
 		//上传完成后的回调方法，一般用于刷新界面之类的
 		uploadFinishedCallback:uploadFinishedCallback,
 		title:'标题',
