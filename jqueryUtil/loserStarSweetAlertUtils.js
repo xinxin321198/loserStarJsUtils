@@ -1,6 +1,7 @@
 
 /**
  * loserStar 基于 www.sweetalert.cn 的提示框方法
+ * https://sweetalert.js.org/
  * version:20231024
  * author：loserStar
  * github:https://github.com/xinxin321198/loserStarJsUtils

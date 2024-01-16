@@ -1,5 +1,8 @@
 /**
  * version :1.2
+ * https://fex-team.github.io/webuploader/
+ * https://github.com/fex-team/webuploader
+ * http://fex.baidu.com/webuploader/
  * 基于bootstrap3的模态对话框和百度上传组件集成的上传附件组件(此组件不依赖于flash，可在最新chrome中禁止flash时使用)，使用原型链的方式封装
  * 
  * 基本用法，引入该js文件和依赖的loserStarSweetAlertUtils.js，以及相关的bootstrap3的js

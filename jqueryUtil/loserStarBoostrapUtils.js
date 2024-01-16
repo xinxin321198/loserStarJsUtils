@@ -1,5 +1,5 @@
 /**
- * version:20230922
+ * version:20240116
  * author：loserStar
  * github:https://github.com/xinxin321198/loserStarJsUtils
  * emial:362527240@qq.com
@@ -25,10 +25,10 @@ loserStarBoostrapUtils.loading = function (title, content) {
         text += "    <div class=\"modal-dialog modal-sm\" role=\"document\">";
         text += "        <div class=\"modal-content\">";
         text += "            <div class=\"modal-header\">";
-        text += "                <h4 class=\"modal-title\" id=\"myModalLabel\">提示</h4>";
+        text += "                <h4 class=\"modal-title\" id=\"myModalLabel\">" + title +"</h4>";
         text += "            </div>";
         text += "            <div class=\"modal-body\">";
-        text += "                处理中，请勿关闭页面...";
+        text += "                "+title;
         text += "            </div>";
         text += "        </div>";
         text += "    </div>";
