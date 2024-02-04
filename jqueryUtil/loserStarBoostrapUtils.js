@@ -1,5 +1,5 @@
 /**
- * version:20240116
+ * version:20240204
  * author：loserStar
  * github:https://github.com/xinxin321198/loserStarJsUtils
  * emial:362527240@qq.com
@@ -100,18 +100,18 @@ loserStarBoostrapUtils.getProgressHtml = function (scale, pointCount) {
  * 生成下拉列表的html（已知完美兼容select2）
  * @param {*} objList array 可选的值数组合集，通过keyFieldName和valueFieldname指定使用数组中的那些字段
  * @param {*} isEmpty bool 是否添加一个空元素
- * @param {*} valueFieldname stirng 用作从objList中取值时的字段名，用作option的选项名称
- * @param {*} keyFieldName stirng 用作从objList中取值时的字段名，用作option的value
+ * @param {*} textFieldName stirng 用作从objList中取值时的key，获取到的值将作为option的选项名称
+ * @param {*} valueFieldName stirng 用作从objList中取值时的key，获取到的值将作为option的值
  * @returns 
  */
-loserStarBoostrapUtils.getSelectHtml = function (objList, isEmpty, valueFieldName, keyFieldName) {
+loserStarBoostrapUtils.getSelectHtml = function (objList, isEmpty, textFieldName, valueFieldName) {
     var text = "";
     if (isEmpty != undefined && isEmpty != null && (typeof isEmpty) == "boolean" && isEmpty) {
         text += "<option value=\"\"></option>";
     }
     for (var i = 0; i < objList.length; i++) {
         var tmp = objList[i];
-        text += "<option value=\"" + tmp[valueFieldName] + "\">" + tmp[keyFieldName] + "</option>";
+        text += "<option value=\"" + tmp[valueFieldName] + "\">" + tmp[textFieldName] + "</option>";
     }
     return text;
 }
