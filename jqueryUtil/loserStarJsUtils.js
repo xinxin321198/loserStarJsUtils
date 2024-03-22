@@ -1016,3 +1016,26 @@ loserStarJsUtils.removeSpaces = function(event) {
   var input = event.target;
   input.value = input.value.replace(/\s/g, '');
 }
+
+/**
+ * form下载
+ * @param url
+ * @param params
+ */
+loserStarJsUtils.downloadFile = function (url, params) {
+  debugger;
+  const form = document.createElement('form')
+  form.action = url
+  form.method = 'post'
+  form.style.display = 'none'
+  form.target = '_blank'
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const input = document.createElement('input')
+      input.name = key
+      input.value = params[key]
+      form.appendChild(input) }
+  }
+  document.body.appendChild(form);
+  form.submit()
+}
