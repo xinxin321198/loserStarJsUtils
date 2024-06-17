@@ -1024,7 +1024,8 @@ loserStarJsUtils.removeSpaces = function(event) {
  */
 loserStarJsUtils.downloadFile = function (url, params) {
   debugger;
-  const form = document.createElement('form')
+  const form = document.createElement('form');
+  form.id = new Date().getTime();
   form.action = url
   form.method = 'post'
   form.style.display = 'none'
@@ -1033,7 +1034,7 @@ loserStarJsUtils.downloadFile = function (url, params) {
     if (params.hasOwnProperty(key)) {
       const input = document.createElement('input')
       input.name = key
-      input.value = params[key]
+      input.value = params[key]?params[key]:''
       form.appendChild(input) }
   }
   document.body.appendChild(form);

@@ -137,3 +137,36 @@ loserStarBoostrapUtils.getRadioHtml = function (objList, groupId, valueFieldName
     }
     return text;
 }
+
+/**
+ * 基于bootstrap的modal的弹窗消息，里面放了一个textarea，方便复制消息内容
+ * @param {*} title 
+ * @param {*} msg 
+ */
+loserStarBoostrapUtils.alertMsg = function(title,msg){
+    var text = "";
+    text += "<div class=\"modal fade\" id=\"loserStarAlertMsgModal\" tabindex=\"-1\" role=\"dialog\">";
+    text += "            <div class=\"modal-dialog\" role=\"document\">";
+    text += "                <div class=\"modal-content\">";
+    text += "                    <div class=\"modal-header\">";
+    text += "                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span";
+    text += "                                aria-hidden=\"true\">&times;</span></button>";
+    text += "                        <h4 class=\"modal-title\">" + title +"</h4>";
+    text += "                    </div>";
+    text += "                    <div class=\"modal-body\">";
+    text += "                        <label for=\"loserStarAlertMsgTextArea\">消息</label>";
+    text += "                        <textarea id=\"loserStarAlertMsgTextArea\" cols=\"40\" rows=\"20\"  class=\"form-control\">";
+    text += msg;
+    text += "                        </textarea>";
+    text += "                    </div>";
+    text += "                    <div class=\"modal-footer\">";
+    text += "                        <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">关闭</button>";
+    text += "                    </div>";
+    text += "                </div>";
+    text += "            </div>";
+    text += "        </div>";
+    if ($("#loserStarAlertMsgModal")[0] == undefined || $("#loserStarAlertMsgModal")[0] == null) {
+        $("body").append(text);
+    }
+    $("#loserStarAlertMsgModal").modal({ backdrop: 'static' });
+}
