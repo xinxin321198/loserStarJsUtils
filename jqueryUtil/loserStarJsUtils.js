@@ -6,6 +6,7 @@
  * 新增了浏览器的版本检测
  * 新增了获取浏览器窗口宽高的方法
  * 20230922 selectedOption里最后触发一下change方法，以便兼容第三方插件，比如select2
+ * 20241204 不适用const，提高浏览器兼容性
  */
 var loserStarJsUtils = {};
 
@@ -47,13 +48,14 @@ loserStarJsUtils.IEVersion = function () {
  * @returns
  */
 loserStarJsUtils.BorwserVersion = function () {
-  var isIE = IEVersion();
+  var isIE = loserStarJsUtils.IEVersion();
   if (isIE == -1) {//非IE
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
     var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器  
     var isFF = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器  
     var isSafari = userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") == -1; //判断是否Safari浏览器  
-    var isChrome = userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Safari") > -1; //判断Chrome浏览器  
+    var isChrome = userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Safari") > -1; //判断Chrome浏览器
+    var isEdge = userAgent.indexOf("Edg") > -1 || userAgent.indexOf("Edge") > -1; // 判断是否Edge浏览器
     if (isFF) { return "FF"; }
     if (isOpera) { return "Opera"; }
     if (isSafari) { return "Safari"; }
@@ -992,7 +994,7 @@ loserStarJsUtils.parseIdCardToAage = function (idCard, now) {
  * @returns {boolean} - 如果有效则返回true，否则返回false
  */
 loserStarJsUtils.validatePhoneNumber = function (phone) {
-  const regex = /^1[3456789]\d{9}$/; // 中国大陆手机号码格式
+  var regex = /^1[3456789]\d{9}$/; // 中国大陆手机号码格式
   return regex.test(phone);
 }
 
@@ -1023,16 +1025,15 @@ loserStarJsUtils.removeSpaces = function(event) {
  * @param params
  */
 loserStarJsUtils.downloadFile = function (url, params) {
-  debugger;
-  const form = document.createElement('form');
+  var form = document.createElement('form');
   form.id = new Date().getTime();
   form.action = url
   form.method = 'post'
   form.style.display = 'none'
   form.target = '_blank'
-  for (const key in params) {
+  for (var key in params) {
     if (params.hasOwnProperty(key)) {
-      const input = document.createElement('input')
+      var input = document.createElement('input')
       input.name = key
       input.value = params[key]?params[key]:''
       form.appendChild(input) }
